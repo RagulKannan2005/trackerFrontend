@@ -3,6 +3,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "JobtrackerApplication",
+      "request": "launch",
+      "mainClass": "com.example.jobtracker.JobtrackerApplication",
+      "projectName": "jobtracker"
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",

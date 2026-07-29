@@ -26,11 +26,15 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse register(RegisterRequest request){
+        if (request.getPassword() == null || request.getPassword().isBlank()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+
         var user= Users.builder()
                     .username(request.getUsername())
                     .email(request.getEmail())
                     .password(passwordEncoder.encode(request.getPassword()))
-                    .role(request.getRole())
+                    .role(request.getRole() != null ? request.getRole() : Role.USER)
                     .active(true)
                     .build();
 
