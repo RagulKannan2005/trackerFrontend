@@ -3,11 +3,8 @@ package com.example.jobtracker.Controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.jobtracker.Dto.TrackerRequest;
 import com.example.jobtracker.Dto.TrackerResponse;
@@ -23,15 +20,29 @@ public class TrackerController {
     private final TrackerService trackerService;
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addtracker")
     public ResponseEntity<TrackerResponse> createTracker(@RequestBody TrackerRequest tracker){
         TrackerResponse response=trackerService.createTracker(tracker);
         return ResponseEntity.status(201).body(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/gettrackers")
     public ResponseEntity<List<TrackerResponse>> getAllTrackers(){
         List<TrackerResponse> response=trackerService.getAllTrackers();
+        return ResponseEntity.ok(response);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/deletetracker/{id}")
+    public ResponseEntity<TrackerResponse> deleteTracker(@PathVariable Long id){
+        TrackerResponse response=trackerService.deleteTracker(id);
+        return ResponseEntity.ok(response);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/updatetracker/{id}")
+    public ResponseEntity<TrackerResponse> updateTracker(@PathVariable Long id, @RequestBody TrackerRequest tracker){
+        TrackerResponse response=trackerService.updateTracker(id,tracker);
         return ResponseEntity.ok(response);
     }
     
