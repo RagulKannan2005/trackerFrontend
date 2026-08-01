@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.jobtracker.Dto.AuthenticationRequest;
 import com.example.jobtracker.Dto.AuthenticationResponse;
 import com.example.jobtracker.Dto.RegisterRequest;
-import com.example.jobtracker.Entity.Role;
 import com.example.jobtracker.Entity.Users;
+import com.example.jobtracker.Enums.Role;
 import com.example.jobtracker.Repository.UserRepository;
 import com.example.jobtracker.Security.JwtService;
 
@@ -42,7 +42,7 @@ public class AuthenticationService {
         var jwtToken=jwtService.generateToken(user);
         return AuthenticationResponse.builder()
             .token(jwtToken)
-            .username(user.getUsername())
+            .username(user.getRealUsername())
             .role(user.getRole())
             .build();
     }
@@ -57,7 +57,7 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .username(user.getUsername())
+                .username(user.getRealUsername())
                 .role(user.getRole())
                 .build();
     }

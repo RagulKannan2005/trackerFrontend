@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.jobtracker.Dto.UserRequestDto;
 import com.example.jobtracker.Dto.UserResponseDto;
-import com.example.jobtracker.Entity.Role;
 import com.example.jobtracker.Entity.Users;
+import com.example.jobtracker.Enums.Role;
 import com.example.jobtracker.Repository.UserRepository;
 import com.example.jobtracker.Service.UserService;
 
@@ -86,7 +86,7 @@ public class UserServiceImp implements UserService {
     private UserResponseDto toDto(Users s) {
         return UserResponseDto.builder()
                 .id(s.getId())
-                .username(s.getUsername())
+                .username(s.getRealUsername())
                 .email(s.getEmail())
                 .password(s.getPassword())
                 .role(s.getRole())

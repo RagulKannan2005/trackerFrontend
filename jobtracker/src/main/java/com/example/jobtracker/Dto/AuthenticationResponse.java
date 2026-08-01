@@ -1,6 +1,6 @@
 package com.example.jobtracker.Dto;
 
-import com.example.jobtracker.Entity.Role;
+import com.example.jobtracker.Enums.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -3,6 +3,7 @@ package com.example.jobtracker.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -26,11 +28,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/error").permitAll()
                         .requestMatchers("/api/v1/users/password/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/v1/users/email/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/v1/users/allusers/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/v1/users/role/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/v1/candidates/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/v1/trackers/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

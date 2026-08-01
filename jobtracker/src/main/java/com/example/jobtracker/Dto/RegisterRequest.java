@@ -1,6 +1,6 @@
 package com.example.jobtracker.Dto;
 
-import com.example.jobtracker.Entity.Role;
+import com.example.jobtracker.Enums.Role;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
