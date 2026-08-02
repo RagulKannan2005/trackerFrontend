@@ -1,5 +1,7 @@
 package com.example.jobtracker.Controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +35,7 @@ public class CandidateController {
     private final CandidateService candidateService;
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @PostMapping({"", "/candidate"})
+    @PostMapping("/candidate")
     public ResponseEntity<CandidateResponse> createCandidate(@Valid @RequestBody CandidateRequest data) {
         CandidateResponse candidateResponse = candidateService.createCandidate(data);
         return ResponseEntity.status(201).body(candidateResponse);
@@ -95,4 +97,11 @@ public class CandidateController {
         return ResponseEntity.ok(
                 candidateService.searchCandidate(filter, pageable));
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/allcandidate")
+    public ResponseEntity<List<CandidateResponse>> getAllCandidate(){
+        return ResponseEntity.ok(candidateService.getAllCandidate());
+    }
+
 }

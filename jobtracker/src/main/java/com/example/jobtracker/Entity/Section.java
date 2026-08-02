@@ -21,45 +21,45 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name="section")
 @Data
-@Table(name = "trackers")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Trackers {
+public class Section {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TrackerName",nullable = false,unique = true)
-    private String trackerName;
+    @Column(name="sectionName",nullable=false,unique=true)
+    private String sectionName;
 
-    @Column(name = "Description",nullable = false)
+    @Column(name="description",nullable=false)
     private String description;
-
-    @Column(name = "active",nullable = false)
+    
+    @Column(name="active",nullable=false)
     private Boolean active;
 
-    @Column(name = "createdAt")
+    @Column(name="createdAt")
     private LocalDate createdAt;
 
-    @Column(name = "updatedAt")
+    @Column(name="updatedAt")
     private LocalDate updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users user;
-
-    @OneToMany(mappedBy = "tracker",cascade=CascadeType.ALL,orphanRemoval=true)
+    @OneToMany(mappedBy = "section",cascade=CascadeType.ALL,orphanRemoval=true)
     private List<TrackerSection> trackerSections;
-    
 
+
+    @ManyToOne
+    @JoinColumn(name="user_id",nullable=false)
+    private Users user;
+    
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDate.now();
         this.updatedAt = LocalDate.now();
-    }   
+    }
 
     @PreUpdate
     public void onUpdate() {
@@ -67,5 +67,7 @@ public class Trackers {
     }
 
     
+    
 
+    
 }

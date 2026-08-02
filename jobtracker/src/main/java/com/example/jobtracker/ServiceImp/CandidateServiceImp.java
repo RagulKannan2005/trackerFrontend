@@ -1,5 +1,6 @@
 package com.example.jobtracker.ServiceImp;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.domain.Page;
@@ -33,23 +34,26 @@ public class CandidateServiceImp implements CandidateService {
         @Override
         public CandidateResponse createCandidate(CandidateRequest data) {
                 Users currentUser = getAuthenticatedUser();
-                
+
                 Long targetUserId = data.getUserId() != null ? data.getUserId() : currentUser.getId();
-                
+
                 // Ensure non-admin users can only create profile for themselves
                 if (!isAdmin(currentUser) && !targetUserId.equals(currentUser.getId())) {
                         throw new IllegalArgumentException("You can only create a candidate profile for yourself");
                 }
 
                 Users user = userRepository.findById(targetUserId)
-                                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + targetUserId));
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "User not found with id: " + targetUserId));
 
                 if (candidaterepo.existsByUserId(user.getId())) {
-                        throw new IllegalArgumentException("Candidate profile already exists for user ID: " + user.getId());
+                        throw new IllegalArgumentException(
+                                        "Candidate profile already exists for user ID: " + user.getId());
                 }
 
                 if (candidaterepo.existsByPhone(data.getPhone())) {
-                        throw new IllegalArgumentException("Candidate with phone number " + data.getPhone() + " already exists");
+                        throw new IllegalArgumentException(
+                                        "Candidate with phone number " + data.getPhone() + " already exists");
                 }
 
                 Candidate candidate = Candidate.builder()
@@ -83,7 +87,8 @@ public class CandidateServiceImp implements CandidateService {
         public CandidateResponse getCurrentCandidateProfile() {
                 Users currentUser = getAuthenticatedUser();
                 Candidate candidate = candidaterepo.findByUserId(currentUser.getId())
-                                .orElseThrow(() -> new ResourceNotFoundException("No candidate profile found for current user"));
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "No candidate profile found for current user"));
                 return toDto(candidate);
         }
 
@@ -94,8 +99,10 @@ public class CandidateServiceImp implements CandidateService {
 
                 validateCandidateOwnership(candidate);
 
-                if (!Objects.equals(candidate.getPhone(), data.getPhone()) && candidaterepo.existsByPhone(data.getPhone())) {
-                        throw new IllegalArgumentException("Candidate with phone number " + data.getPhone() + " already exists");
+                if (!Objects.equals(candidate.getPhone(), data.getPhone())
+                                && candidaterepo.existsByPhone(data.getPhone())) {
+                        throw new IllegalArgumentException(
+                                        "Candidate with phone number " + data.getPhone() + " already exists");
                 }
 
                 candidate.setCandidateName(data.getCandidateName());
@@ -136,8 +143,10 @@ public class CandidateServiceImp implements CandidateService {
                         candidate.setGraduationYear(request.getGreadutionYear());
                 }
                 if (request.getPhone() != null) {
-                        if (!Objects.equals(candidate.getPhone(), request.getPhone()) && candidaterepo.existsByPhone(request.getPhone())) {
-                                throw new IllegalArgumentException("Candidate with phone number " + request.getPhone() + " already exists");
+                        if (!Objects.equals(candidate.getPhone(), request.getPhone())
+                                        && candidaterepo.existsByPhone(request.getPhone())) {
+                                throw new IllegalArgumentException("Candidate with phone number " + request.getPhone()
+                                                + " already exists");
                         }
                         candidate.setPhone(request.getPhone());
                 }
@@ -190,7 +199,8 @@ public class CandidateServiceImp implements CandidateService {
                 }
                 String email = authentication.getName();
                 return userRepository.findByEmail(email)
-                                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found with email: " + email));
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Authenticated user not found with email: " + email));
         }
 
         private boolean isAdmin(Users user) {
@@ -200,8 +210,10 @@ public class CandidateServiceImp implements CandidateService {
 
         private void validateCandidateOwnership(Candidate candidate) {
                 Users currentUser = getAuthenticatedUser();
-                if (!isAdmin(currentUser) && (candidate.getUser() == null || !candidate.getUser().getId().equals(currentUser.getId()))) {
-                        throw new IllegalArgumentException("You are not authorized to access or modify this candidate profile");
+                if (!isAdmin(currentUser) && (candidate.getUser() == null
+                                || !candidate.getUser().getId().equals(currentUser.getId()))) {
+                        throw new IllegalArgumentException(
+                                        "You are not authorized to access or modify this candidate profile");
                 }
         }
 
@@ -212,9 +224,15 @@ public class CandidateServiceImp implements CandidateService {
                 try {
                         return English.valueOf(value.trim().toUpperCase());
                 } catch (IllegalArgumentException e) {
-                        throw new IllegalArgumentException("Invalid value '" + value + "' for " + fieldName 
+                        throw new IllegalArgumentException("Invalid value '" + value + "' for " + fieldName
                                         + ". Allowed values: BASIC, INTERMEDIATE, ADVANCED, FLUENT");
                 }
+        }
+
+        @Override
+        public List<CandidateResponse> getAllCandidate() {
+                List<Candidate> ca = candidaterepo.findAll();
+                return ca.stream().map(this::toDto).toList();
         }
 
         private CandidateResponse toDto(Candidate c) {

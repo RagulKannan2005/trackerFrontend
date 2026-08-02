@@ -3,6 +3,7 @@ package com.example.jobtracker.Service;
 import java.util.List;
 
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,6 +14,7 @@ import com.example.jobtracker.Dto.CandidateResponse;
 
 public interface CandidateService {
     CandidateResponse createCandidate(CandidateRequest data);
+    List<CandidateResponse> getAllCandidate();
     CandidateResponse getCandidateById(Long id);
     CandidateResponse getCurrentCandidateProfile();
     CandidateResponse updateCandidate(Long id, CandidateRequest data);

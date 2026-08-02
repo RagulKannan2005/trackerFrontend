@@ -13,7 +13,6 @@ import com.example.jobtracker.Repository.TrackerRepository;
 import com.example.jobtracker.Repository.UserRepository;
 import com.example.jobtracker.Service.TrackerService;
 
-import jakarta.websocket.server.ServerEndpoint;
 import lombok.RequiredArgsConstructor;
 
 @Service
