@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/trackers/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/api/v1/section/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/trackersection/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/v1/skills/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

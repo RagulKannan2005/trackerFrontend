@@ -3,6 +3,7 @@ package com.example.jobtracker.Controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,25 +27,29 @@ public class SkillsController {
 
     private final SkillsService skillsService;
 
-
+    
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/")
     public ResponseEntity<List<SkillsResponse>> getAllSkills(){
         List<SkillsResponse> skills = skillsService.getAllSkills();
         return ResponseEntity.ok(skills);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/addSkill")
     public ResponseEntity<SkillsResponse> addskill(@RequestBody @Valid SkillsRequest s){
         SkillsResponse skill = skillsService.createSkill(s);
         return ResponseEntity.ok(skill);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/updateSkill/{id}")
     public ResponseEntity<SkillsResponse> updateSkill(@PathVariable Long id, @RequestBody @Valid SkillsRequest s){
         SkillsResponse skill = skillsService.updateSkill(id, s);
         return ResponseEntity.ok(skill);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteSkill/{id}")
     public ResponseEntity<Void> deleteSkill(@PathVariable Long id){
         skillsService.deleteSkill(id);
