@@ -1,7 +1,5 @@
 package com.example.jobtracker.Dto;
 
-import com.example.jobtracker.Enums.Role;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +14,4 @@ public class SectionResponse {
     private String sectionName;
     private String description;
     private Boolean active;
-
-    private String userName;
-    private Role role;
 }

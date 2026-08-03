@@ -21,7 +21,4 @@ public class SectionRequest {
 
     @NotNull(message="active status is required")
     private Boolean active;
-
-    @NotNull(message = "user id is required")
-    private Long userId;
 }

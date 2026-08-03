@@ -18,21 +18,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
-
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    
+
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
-        @NotNull HttpServletRequest request,
-        @NotNull HttpServletResponse response,
-        @NotNull FilterChain filterChain
-    ) throws ServletException,IOException{
-        final String authHeader= request.getHeader("Authorization");
+            @NotNull HttpServletRequest request,
+            @NotNull HttpServletResponse response,
+            @NotNull FilterChain filterChain) throws ServletException, IOException {
+        final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
 
@@ -49,21 +47,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
                     if (jwtService.isTokenValid(jwt, userDetails)) {
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                        );
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities());
                         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }
                 }
             }
         } catch (Exception e) {
-            // Log or ignore invalid/malformed JWT token so Spring Security handles unauthenticated request gracefully
             logger.error("Cannot set user authentication: {}", e);
         }
         filterChain.doFilter(request, response);
     }
 
-    
 }
