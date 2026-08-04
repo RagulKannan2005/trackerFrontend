@@ -51,6 +51,6 @@ public class CandidateRequest {
     @NotNull(message = "user_id is required to store the candidate")
     private Long userId;
 
-
-
+    @NotNull(message = "tracker_id is required to store the candidate")
+    private Long trackerId;
 }

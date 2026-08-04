@@ -25,4 +25,7 @@ public class CandidateResponse {
 
     private Long userId;
     private String username;
+    private Long trackerId;
+    private String trackerName;
+    private TrackerDetailResponse trackerDetails;
 }

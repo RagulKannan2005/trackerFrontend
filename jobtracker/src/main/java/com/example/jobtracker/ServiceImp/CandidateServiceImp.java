@@ -1,5 +1,6 @@
 package com.example.jobtracker.ServiceImp;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,16 +9,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.jobtracker.Dto.CandidateFilterRequest;
 import com.example.jobtracker.Dto.CandidatePatchRequest;
 import com.example.jobtracker.Dto.CandidateRequest;
 import com.example.jobtracker.Dto.CandidateResponse;
+import com.example.jobtracker.Dto.SectionDetailResponse;
+import com.example.jobtracker.Dto.SkillDetailResponse;
+import com.example.jobtracker.Dto.TrackerDetailResponse;
 import com.example.jobtracker.Entity.Candidate;
+import com.example.jobtracker.Entity.Section;
+import com.example.jobtracker.Entity.Skills;
+import com.example.jobtracker.Entity.Trackers;
 import com.example.jobtracker.Entity.Users;
 import com.example.jobtracker.Enums.English;
 import com.example.jobtracker.Exception.ResourceNotFoundException;
 import com.example.jobtracker.Repository.CandidateRepository;
+import com.example.jobtracker.Repository.TrackerRepository;
 import com.example.jobtracker.Repository.UserRepository;
 import com.example.jobtracker.Service.CandidateService;
 import com.example.jobtracker.Spesification.CandidateSpecification;
@@ -25,13 +34,16 @@ import com.example.jobtracker.Spesification.CandidateSpecification;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CandidateServiceImp implements CandidateService {
 
         private final CandidateRepository candidaterepo;
         private final UserRepository userRepository;
+        private final TrackerRepository trackerRepository;
 
         @Override
+        @Transactional
         public CandidateResponse createCandidate(CandidateRequest data) {
                 Users currentUser = getAuthenticatedUser();
 
@@ -56,6 +68,10 @@ public class CandidateServiceImp implements CandidateService {
                                         "Candidate with phone number " + data.getPhone() + " already exists");
                 }
 
+                Trackers tracker = trackerRepository.findById(data.getTrackerId())
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "Tracker not found with id: " + data.getTrackerId()));
+
                 Candidate candidate = Candidate.builder()
                                 .candidateName(data.getCandidateName())
                                 .degree(data.getDegree())
@@ -69,6 +85,7 @@ public class CandidateServiceImp implements CandidateService {
                                 .englishWriting(parseEnglishEnum(data.getEnglishWriting(), "englishWriting"))
                                 .englishReading(parseEnglishEnum(data.getEnglishReading(), "englishReading"))
                                 .user(user)
+                                .tracker(tracker)
                                 .build();
 
                 Candidate savedCandidate = candidaterepo.save(candidate);
@@ -93,6 +110,7 @@ public class CandidateServiceImp implements CandidateService {
         }
 
         @Override
+        @Transactional
         public CandidateResponse updateCandidate(Long id, CandidateRequest data) {
                 Candidate candidate = candidaterepo.findById(id)
                                 .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with id: " + id));
@@ -117,11 +135,19 @@ public class CandidateServiceImp implements CandidateService {
                 candidate.setEnglishWriting(parseEnglishEnum(data.getEnglishWriting(), "englishWriting"));
                 candidate.setEnglishReading(parseEnglishEnum(data.getEnglishReading(), "englishReading"));
 
+                if (data.getTrackerId() != null) {
+                        Trackers tracker = trackerRepository.findById(data.getTrackerId())
+                                        .orElseThrow(() -> new ResourceNotFoundException(
+                                                        "Tracker not found with id: " + data.getTrackerId()));
+                        candidate.setTracker(tracker);
+                }
+
                 Candidate savedCandidate = candidaterepo.save(candidate);
                 return toDto(savedCandidate);
         }
 
         @Override
+        @Transactional
         public CandidateResponse updateCandidateFields(Long id, CandidatePatchRequest request) {
                 Candidate candidate = candidaterepo.findById(id)
                                 .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with id: " + id));
@@ -168,11 +194,18 @@ public class CandidateServiceImp implements CandidateService {
                 if (request.getEnglishReading() != null) {
                         candidate.setEnglishReading(parseEnglishEnum(request.getEnglishReading(), "englishReading"));
                 }
+                if (request.getTrackerId() != null) {
+                        Trackers tracker = trackerRepository.findById(request.getTrackerId())
+                                        .orElseThrow(() -> new ResourceNotFoundException(
+                                                        "Tracker not found with id: " + request.getTrackerId()));
+                        candidate.setTracker(tracker);
+                }
                 Candidate savedCandidate = candidaterepo.save(candidate);
                 return toDto(savedCandidate);
         }
 
         @Override
+        @Transactional
         public void deleteCandidate(Long id) {
                 Candidate candidate = candidaterepo.findById(id)
                                 .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with id: " + id));
@@ -251,7 +284,58 @@ public class CandidateServiceImp implements CandidateService {
                                 .englishReading(c.getEnglishReading() != null ? c.getEnglishReading().name() : null)
                                 .userId(c.getUser() != null ? c.getUser().getId() : null)
                                 .username(c.getUser() != null ? c.getUser().getRealUsername() : null)
+                                .trackerId(c.getTracker() != null ? c.getTracker().getId() : null)
+                                .trackerName(c.getTracker() != null ? c.getTracker().getTrackerName() : null)
+                                .trackerDetails(mapTrackerDetails(c.getTracker()))
                                 .build();
         }
+
+        private TrackerDetailResponse mapTrackerDetails(Trackers t) {
+                if (t == null) {
+                        return null;
+                }
+
+                List<SectionDetailResponse> sectionDtos = (t.getTrackerSections() != null)
+                                ? t.getTrackerSections().stream()
+                                                .sorted(Comparator.comparing(ts -> ts.getDisplayOrder() != null ? ts.getDisplayOrder() : 0))
+                                                .map(ts -> {
+                                                        Section sec = ts.getSection();
+                                                        List<SkillDetailResponse> skillDtos = (ts.getSectionSkills() != null)
+                                                                        ? ts.getSectionSkills().stream()
+                                                                                        .sorted(Comparator.comparing(ss -> ss.getDisplayOrder() != null ? ss.getDisplayOrder() : 0))
+                                                                                        .map(ss -> {
+                                                                                                Skills sk = ss.getSkill();
+                                                                                                return SkillDetailResponse.builder()
+                                                                                                                .sectionSkillId(ss.getId())
+                                                                                                                .skillId(sk != null ? sk.getId() : null)
+                                                                                                                .skillName(sk != null ? sk.getSkillName() : null)
+                                                                                                                .description(sk != null ? sk.getDescription() : null)
+                                                                                                                .displayOrder(ss.getDisplayOrder())
+                                                                                                                .build();
+                                                                                        })
+                                                                                        .toList()
+                                                                        : List.of();
+
+                                                        return SectionDetailResponse.builder()
+                                                                        .trackerSectionId(ts.getId())
+                                                                        .sectionId(sec != null ? sec.getId() : null)
+                                                                        .sectionName(sec != null ? sec.getSectionName() : null)
+                                                                        .description(sec != null ? sec.getDescription() : null)
+                                                                        .displayOrder(ts.getDisplayOrder())
+                                                                        .skills(skillDtos)
+                                                                        .build();
+                                                })
+                                                .toList()
+                                : List.of();
+
+                return TrackerDetailResponse.builder()
+                                .id(t.getId())
+                                .trackerName(t.getTrackerName())
+                                .description(t.getDescription())
+                                .active(t.getActive())
+                                .sections(sectionDtos)
+                                .build();
+        }
+
 
 }

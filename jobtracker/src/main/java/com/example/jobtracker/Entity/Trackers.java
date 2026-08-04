@@ -18,7 +18,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -51,6 +53,11 @@ public class Trackers {
     @JoinColumn(name = "user_id")
     private Users user;
 
+    @OneToMany(mappedBy = "tracker", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<Candidate> candidates;
+
     @OneToMany(mappedBy = "tracker",cascade=CascadeType.ALL,orphanRemoval=true)
     private List<TrackerSection> trackerSections;
     
@@ -65,6 +72,11 @@ public class Trackers {
     public void onUpdate() {
         this.updatedAt = LocalDate.now();
     }
+
+    
+
+    
+
 
     
 

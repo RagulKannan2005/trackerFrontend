@@ -1,12 +1,14 @@
 package com.example.jobtracker.Entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -41,6 +43,9 @@ public class Skills {
 
     @Column(name = "updatedAt")
     private LocalDate updatedAt;
+
+    @OneToMany(mappedBy = "skill")
+    private List<SectionSkill> sectionSkills;
 
     @PrePersist
     public void onCreate() {

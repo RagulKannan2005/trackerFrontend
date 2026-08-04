@@ -24,6 +24,7 @@ public class CandidatePatchRequest {
     private String englishSpeaking;
     private String englishWriting;
     private String englishReading;
+    private Long trackerId;
 
     // Backward compatibility for legacy JSON property name
     public String getGreadutionYear() {
