@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SectionSkillController {
 
-    private SectionSkillService sectionSkillService;
+    private final SectionSkillService sectionSkillService;
     
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping

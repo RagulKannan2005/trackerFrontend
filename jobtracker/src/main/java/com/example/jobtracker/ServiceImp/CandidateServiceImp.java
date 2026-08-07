@@ -2,7 +2,9 @@ package com.example.jobtracker.ServiceImp;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import com.example.jobtracker.Dto.SectionDetailResponse;
 import com.example.jobtracker.Dto.SkillDetailResponse;
 import com.example.jobtracker.Dto.TrackerDetailResponse;
 import com.example.jobtracker.Entity.Candidate;
+import com.example.jobtracker.Entity.CandidateSkillProgress;
 import com.example.jobtracker.Entity.Section;
 import com.example.jobtracker.Entity.Skills;
 import com.example.jobtracker.Entity.Trackers;
@@ -269,6 +272,15 @@ public class CandidateServiceImp implements CandidateService {
         }
 
         private CandidateResponse toDto(Candidate c) {
+                Map<Long, CandidateSkillProgress> progressMap = (c.getSkillProgresses() != null)
+                                ? c.getSkillProgresses().stream()
+                                                .filter(csp -> csp.getSectionSkill() != null && csp.getSectionSkill().getId() != null)
+                                                .collect(Collectors.toMap(
+                                                                csp -> csp.getSectionSkill().getId(),
+                                                                csp -> csp,
+                                                                (existing, replacement) -> replacement))
+                                : Map.of();
+
                 return CandidateResponse.builder()
                                 .id(c.getId())
                                 .candidateName(c.getCandidateName())
@@ -282,15 +294,17 @@ public class CandidateServiceImp implements CandidateService {
                                 .englishSpeaking(c.getEnglishSpeaking() != null ? c.getEnglishSpeaking().name() : null)
                                 .englishWriting(c.getEnglishWriting() != null ? c.getEnglishWriting().name() : null)
                                 .englishReading(c.getEnglishReading() != null ? c.getEnglishReading().name() : null)
+                                .createdAt(c.getCreatedAt())
+                                .updatedAt(c.getUpdatedAt())
                                 .userId(c.getUser() != null ? c.getUser().getId() : null)
                                 .username(c.getUser() != null ? c.getUser().getRealUsername() : null)
                                 .trackerId(c.getTracker() != null ? c.getTracker().getId() : null)
                                 .trackerName(c.getTracker() != null ? c.getTracker().getTrackerName() : null)
-                                .trackerDetails(mapTrackerDetails(c.getTracker()))
+                                .trackerDetails(mapTrackerDetails(c.getTracker(), progressMap))
                                 .build();
         }
 
-        private TrackerDetailResponse mapTrackerDetails(Trackers t) {
+        private TrackerDetailResponse mapTrackerDetails(Trackers t, Map<Long, CandidateSkillProgress> progressMap) {
                 if (t == null) {
                         return null;
                 }
@@ -305,12 +319,17 @@ public class CandidateServiceImp implements CandidateService {
                                                                                         .sorted(Comparator.comparing(ss -> ss.getDisplayOrder() != null ? ss.getDisplayOrder() : 0))
                                                                                         .map(ss -> {
                                                                                                 Skills sk = ss.getSkill();
+                                                                                                CandidateSkillProgress csp = progressMap != null ? progressMap.get(ss.getId()) : null;
                                                                                                 return SkillDetailResponse.builder()
                                                                                                                 .sectionSkillId(ss.getId())
                                                                                                                 .skillId(sk != null ? sk.getId() : null)
                                                                                                                 .skillName(sk != null ? sk.getSkillName() : null)
                                                                                                                 .description(sk != null ? sk.getDescription() : null)
                                                                                                                 .displayOrder(ss.getDisplayOrder())
+                                                                                                                .progressId(csp != null ? csp.getId() : null)
+                                                                                                                .status(csp != null && csp.getStatus() != null ? csp.getStatus().name() : "NOT_STARTED")
+                                                                                                                .remarks(csp != null ? csp.getRemarks() : null)
+                                                                                                                .progressUpdatedAt(csp != null ? csp.getUpdatedAt() : null)
                                                                                                                 .build();
                                                                                         })
                                                                                         .toList()

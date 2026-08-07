@@ -100,7 +100,11 @@ public class SectionSkillServiceImp implements SectionSkillService {
         return SectionSkillResponse.builder()
                 .id(s.getId())
                 .trackerSectionId(s.getTrackerSection() != null ? s.getTrackerSection().getId() : null)
+                .sectionName(s.getTrackerSection() != null && s.getTrackerSection().getSection() != null 
+                        ? s.getTrackerSection().getSection().getSectionName() : null)
                 .skillId(s.getSkill() != null ? s.getSkill().getId() : null)
+                .skillName(s.getSkill() != null ? s.getSkill().getSkillName() : null)
+                .description(s.getSkill() != null ? s.getSkill().getDescription() : null)
                 .displayOrder(s.getDisplayOrder())
                 .build();
     }

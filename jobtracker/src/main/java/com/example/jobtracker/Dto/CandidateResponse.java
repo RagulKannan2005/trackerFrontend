@@ -1,5 +1,7 @@
 package com.example.jobtracker.Dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +24,8 @@ public class CandidateResponse {
     private String englishSpeaking;
     private String englishWriting;
     private String englishReading;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 
     private Long userId;
     private String username;

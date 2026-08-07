@@ -29,7 +29,7 @@ public class SkillsController {
 
     
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<SkillsResponse>> getAllSkills(){
         List<SkillsResponse> skills = skillsService.getAllSkills();
         return ResponseEntity.ok(skills);

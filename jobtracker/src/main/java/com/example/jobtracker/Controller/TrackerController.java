@@ -27,7 +27,7 @@ public class TrackerController {
         return ResponseEntity.status(201).body(response);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/gettrackers")
     public ResponseEntity<List<TrackerResponse>> getAllTrackers(){
         List<TrackerResponse> response=trackerService.getAllTrackers();

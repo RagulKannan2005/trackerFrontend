@@ -1,11 +1,13 @@
 package com.example.jobtracker.Entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.example.jobtracker.Entity.Users;
 
 import com.example.jobtracker.Enums.English;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -90,6 +93,11 @@ public class Candidate {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Trackers tracker;
+
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<CandidateSkillProgress> skillProgresses;
 
     @PrePersist
     public void onCreate() {
