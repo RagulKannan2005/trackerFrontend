@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/skills/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/section-skills/**").hasAnyRole("ADMIN","USER")
                         .requestMatchers("/api/v1/candidate-skill-progress/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/api/v1/google-meet/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
