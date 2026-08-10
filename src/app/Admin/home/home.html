@@ -1,1 +1,16 @@
-<p>home works!</p>
+<div class="home-container">
+    <div class="greetings">
+        <h2>Welcome to Job Tracker to Elevate your career🚀 </h2>
+        <span class="subtitle">Track your training progress and achieve your career goals</span>
+    </div>
+    <div class="container">
+        @for(tracker of trackers;track tracker.name){
+        <div class="card">
+
+            <h3>{{tracker.name}}</h3>
+            <h4>{{tracker.count}}</h4>
+
+        </div>
+        }
+    </div>
+</div>

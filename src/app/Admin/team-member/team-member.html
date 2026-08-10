@@ -1,30 +1,183 @@
-<div class="container">
-    <div class="team-member-container">
-        <div class="team-member-header">
-            <h1>Team Member</h1>
-            <span>welcome to the Job Coaching Tracker</span>
-        </div>
-        <form class="team-member-form">
-            <div class="form-group">
-                <label for="candidateName">Candidate Name</label>
-                <input type="text" name="" id="">
-            </div>
-            <div class="form-group">
-                <label for="Group">Group</label>
-                <input type="text" name="group" id="">
-            </div>
-            <div class="form-group">
-                <label for="education">Education</label>
-                <input type="text" name="education" id="">
-            </div>
-            <div class="form-group">
-                <label for="">Company Name and Location</label>
-                <input type="text">
-            </div>
-            <div class="form-group">
-                <label for="">Interested Country</label>
-                <input type="text" name="" id="">
-            </div>
-        </form>
+<div class="page_header">
+  <div class="header-title-section">
+    <h2>Team Members</h2>
+    <span class="header-subtitle">Manage candidate profiles, qualifications, and onboarding details</span>
+  </div>
+  <div class="header-actions">
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search team members..." />
+      <button type="button">🔎</button>
     </div>
+    <div class="add_button">
+      <button [class.close-mode]="showform" (click)="showform = !showform">
+        <span>{{ showform ? '✕ Close' : '➕ Add Team Member' }}</span>
+      </button>
+    </div>
+  </div>
 </div>
+
+<div class="container" *ngIf="showform">
+  <div class="team-member-container">
+    <div class="team-member-header">
+      <div class="header-badge-icon">👥</div>
+      <div>
+        <h1>Team Member Registration</h1>
+        <span>Welcome to the Job Coaching Tracker registration portal</span>
+      </div>
+    </div>
+
+    <form class="team-member-form">
+      <div class="form-group">
+        <label for="candidateName">Candidate Name</label>
+        <input type="text" id="candidateName" placeholder="e.g. Ragulkannan" />
+      </div>
+
+      <div class="form-group">
+        <label for="group">Group</label>
+        <input type="text" id="group" placeholder="e.g. Job Coaching Team" />
+      </div>
+
+      <div class="form-group">
+        <label for="education">Education</label>
+        <input type="text" id="education" placeholder="e.g. B.E" />
+      </div>
+
+      <div class="form-group">
+        <label for="company">Company Name & Location</label>
+        <input type="text" id="company" placeholder="e.g. Searching job" />
+      </div>
+
+      <div class="form-group">
+        <label for="country">Interested Country</label>
+        <input type="text" id="country" placeholder="e.g. Canada" />
+      </div>
+
+      <div class="form-group">
+        <label for="currentRole">Current Role</label>
+        <input type="text" id="currentRole" placeholder="e.g. SDE" />
+      </div>
+
+      <div class="form-group">
+        <label for="contact">Contact Number</label>
+        <input type="tel" id="contact" placeholder="e.g. 8870158914" />
+      </div>
+
+      <div class="form-group">
+        <label for="secondarySkill">Secondary Skill</label>
+        <input type="text" id="secondarySkill" placeholder="e.g. Full Stack" />
+      </div>
+
+      <div class="form-group">
+        <label for="experience">Total Experience</label>
+        <input type="text" id="experience" placeholder="e.g. 1 year" />
+      </div>
+
+      <div class="form-group">
+        <label for="abroad">Interested in Abroad Opportunities</label>
+        <select id="abroad">
+          <option value="" disabled selected>Choose</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="oss">OSS Initiated - 2025</label>
+        <select id="oss">
+          <option value="" disabled selected>Choose</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="cv">CV Document</label>
+        <input type="file" id="cv" />
+      </div>
+
+      <div class="form-group">
+        <label for="passport">Passport</label>
+        <select id="passport">
+          <option value="" disabled selected>Choose</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="transcript">College Transcript</label>
+        <select id="transcript">
+          <option value="" disabled selected>Choose</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="remarks">Remarks</label>
+        <input type="text" id="remarks" placeholder="Enter remarks..." />
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-submit">Save Member</button>
+        <button type="button" class="btn-cancel" (click)="showform = false">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="Table-container">
+  <div class="table-header-bar">
+    <h3 class="table-title">Team Candidates Roster</h3>
+    <span class="table-badge">1 Active Member</span>
+  </div>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Candidate Name</th>
+          <th>Group</th>
+          <th>Education</th>
+          <th>Company Name</th>
+          <th>Interested Country</th>
+          <th>Current Role</th>
+          <th>Contact Number</th>
+          <th>Secondary Skill</th>
+          <th>Total Experience</th>
+          <th>Abroad Opp.</th>
+          <th>OSS Initiated</th>
+          <th>CV</th>
+          <th>Passport</th>
+          <th>College Transcript</th>
+          <th>Remarks</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="candidate-cell">
+              <div class="avatar-badge">R</div>
+              <span class="candidate-name">Ragulkannan</span>
+            </div>
+          </td>
+          <td><span class="badge-tag">Job coaching team</span></td>
+          <td>B.E</td>
+          <td>Searching job</td>
+          <td>Canada</td>
+          <td><span class="badge-tag">SDE</span></td>
+          <td>8870158914</td>
+          <td>Full stack</td>
+          <td>1 year</td>
+          <td><span class="status-pill yes">Yes</span></td>
+          <td><span class="status-pill yes">Yes</span></td>
+          <td><span class="status-pill info">Yes</span></td>
+          <td><span class="status-pill yes">Yes</span></td>
+          <td><span class="status-pill yes">Yes</span></td>
+          <td>Good</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

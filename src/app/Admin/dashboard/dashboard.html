@@ -1,89 +1,135 @@
 <div class="container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo-container">
-            <div class="logo-icon">⚡</div>
-            <div class="logo-text">
-                <h3>JCT</h3>
-                <span class="logo-subtitle">Job Coaching Tracker</span>
-            </div>
-        </div>
-
-        <div class="nav-section-title">MAIN MENU</div>
-
-        <div class="nav-links active">
-            <span class="icon">🏠</span>
-            <span class="text">Dashboard</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">👥</span>
-            <span class="text">Team Member</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">🎓</span>
-            <span class="text">Final Year</span>
-            <span class="nav-badge blue">320</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">📚</span>
-            <span class="text">Course Topic Info</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">📈</span>
-            <span class="text">Trackers</span>
-            <span class="nav-badge green">12 Live</span>
-        </div>
-
-        <div class="nav-section-title">MANAGEMENT</div>
-
-        <div class="nav-links">
-            <span class="icon">🛠️</span>
-            <span class="text">Resources</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">🙋🏻‍♂️</span>
-            <span class="text">Attendance</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">👔</span>
-            <span class="text">Experienced People</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">🎯</span>
-            <span class="text">Goals</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">🗓️</span>
-            <span class="text">Meetings</span>
-            <span class="nav-badge pulse">5 Today</span>
-        </div>
-
-        <div class="nav-links">
-            <span class="icon">⚙️</span>
-            <span class="text">Settings</span>
-        </div>
-
-        <div class="sidebar-footer">
-            <div class="user-pill">
-                <div class="avatar">RK</div>
-                <div class="user-info">
-                    <span class="user-name">Ragul Kannan</span>
-                    <span class="user-role">Head Coach</span>
-                </div>
-            </div>
-            <div class="nav-links logout">
-                <span class="icon">🚪</span>
-                <span class="text">Logout</span>
-            </div>
-        </div>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">
+        <h3>JCT</h3>
+        <span class="logo-subtitle">Job Coaching Tracker</span>
+      </div>
     </div>
 
-    
+    <div class="nav-section-title">MAIN MENU</div>
+
+    <div class="nav-links" routerLink="/admin/home" routerLinkActive="active">
+      <span class="icon">🏠</span>
+      <span class="text">Dashboard</span>
+    </div>
+
+    <div class="nav-links" routerLink="/admin/team-member" routerLinkActive="active">
+      <span class="icon">👥</span>
+      <span class="text">Team Member</span>
+    </div>
+
+    <div class="nav-links" routerLink="/admin/final-year" routerLinkActive="active">
+      <span class="icon">🎓</span>
+      <span class="text">Final Year</span>
+      <span class="nav-badge blue">320</span>
+    </div>
+
+    <div class="nav-links" routerLink="/admin/courseinfo">
+      <span class="icon">📚</span>
+      <span class="text">Course Topic Info</span>
+    </div>
+
+    <!-- Trackers Accordion Item -->
+    <div class="nav-accordion" [class.expanded]="isTrackerOpen">
+      <div class="nav-links nav-accordion-header" (click)="toggleTrackerMenu($event)">
+        <span class="icon">📈</span>
+        <span class="text">Trackers</span>
+        <span class="nav-badge green">12 Live</span>
+        <span class="accordion-arrow" [class.open]="isTrackerOpen">❯</span>
+      </div>
+
+      @if (isTrackerOpen) {
+        <div class="submenu-container">
+          <div
+            routerLink="/admin/java"
+            class="submenu-item"
+            [class.active]="selectedTracker === 'Java'"
+            (click)="selectTracker('Java')"
+          >
+            <!-- <span class="submenu-bullet">•</span> -->
+            <span class="submenu-text">Java</span>
+          </div>
+          <div
+            class="submenu-item"
+            [class.active]="selectedTracker === '.NET'"
+            (click)="selectTracker('.NET')" routerLink="/admin/dotnet"
+          >
+            <!-- <span class="submenu-bullet">•</span> -->
+            <span class="submenu-text" >.NET</span>
+          </div>
+          <div
+            class="submenu-item"
+            [class.active]="selectedTracker === 'Cyber Security'"
+            (click)="selectTracker('Cyber Security')" routerLink="/admin/cybersecurity"
+          >
+            <!-- <span class="submenu-bullet">•</span> -->
+            <span class="submenu-text" >Cyber Security</span>
+          </div>
+          <div
+            class="submenu-item"
+            [class.active]="selectedTracker === 'DevOps'"
+            (click)="selectTracker('DevOps')" routerLink="/admin/devops"
+          >
+            <!-- <span class="submenu-bullet">•</span> -->
+            <span class="submenu-text" >DevOps</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="nav-section-title">MANAGEMENT</div>
+
+    <div class="nav-links">
+      <span class="icon">🛠️</span>
+      <span class="text">Resources</span>
+    </div>
+
+    <div class="nav-links">
+      <span class="icon">🙋🏻‍♂️</span>
+      <span class="text">Attendance</span>
+    </div>
+
+    <div class="nav-links">
+      <span class="icon">👔</span>
+      <span class="text">Experienced People</span>
+    </div>
+
+    <div class="nav-links">
+      <span class="icon">🎯</span>
+      <span class="text">Goals</span>
+    </div>
+
+    <div class="nav-links">
+      <span class="icon">🗓️</span>
+      <span class="text">Meetings</span>
+      <span class="nav-badge pulse">5 Today</span>
+    </div>
+
+    <div class="nav-links">
+      <span class="icon">⚙️</span>
+      <span class="text">Settings</span>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="avatar">RK</div>
+        <div class="user-info">
+          <span class="user-name">Ragul Kannan</span>
+          <span class="user-role">Head Coach</span>
+        </div>
+      </div>
+      <div class="nav-links logout">
+        <span class="icon">🚪</span>
+        <span class="text">Logout</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

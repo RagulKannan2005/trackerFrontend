@@ -1,26 +1,52 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, FormsModule],
+  imports: [RouterLink, FormsModule,ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })
 export class Login {
-  private router = inject(Router);
+ 
+  private fb=inject(FormBuilder);
+  private authservice=inject(Auth);
 
-  loginData = {
-    email: 'admin1@gmail.com',
-    password: 'admin123',
+  loginData =this.fb.group({
+    email: [''],
+    password: [''],
     remember: false
-  };
-
+  });
+ constructor(private router:Router){}
   onLogin() {
-    if (this.loginData.email == "admin1@gmail.com" && this.loginData.password == "admin123") {
-      this.router.navigate(['admindashboard']);
-    }
-    console.log('Login data submitted:', this.loginData);
+    const credentials = {
+      email: this.loginData.value.email,
+      password: this.loginData.value.password
+    };
+    this.authservice.login(credentials).subscribe({
+      next:(response:any)=>{
+        localStorage.setItem('token',response.token);
+        localStorage.setItem(
+          'user',
+          JSON.stringify({
+            id:response.id,
+            username:response.username,
+            role:response.role,
+          })
+        )
+        if(response.role==='ADMIN'){
+          this.router.navigate(['/admin/home']);
+        }
+        console.log('login successfull');
+      },
+      error:(error)=>{
+        console.log('login failed');
+        console.log(error);
+        this.loginData.reset();
+      }
+    })
+    
   }
 }
