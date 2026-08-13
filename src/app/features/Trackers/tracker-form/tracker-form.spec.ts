@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Java } from './java';
+import { TrackerForm } from './tracker-form';
 
-describe('Java', () => {
-  let component: Java;
-  let fixture: ComponentFixture<Java>;
+describe('TrackerForm', () => {
+  let component: TrackerForm;
+  let fixture: ComponentFixture<TrackerForm>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Java],
+      imports: [TrackerForm],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Java);
+    fixture = TestBed.createComponent(TrackerForm);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

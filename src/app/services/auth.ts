@@ -1,28 +1,44 @@
-import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
-    providedIn:'root',
+  providedIn: 'root',
 })
-export class Auth{
+export class Auth {
+  private http = inject(HttpClient);
 
+  private apiurl = 'http://localhost:8081/api/v1/auth';
 
-    private http=inject(HttpClient);
+  currentUser = signal<any>(null);
 
-    private apiurl='http://localhost:8081/api/v1/auth';
+  constructor(private router: Router) {}
+  register(user: any) {
+    return this.http.post(this.apiurl + '/register', user);
+  }
 
-    register(user:any){
-        return this.http.post(this.apiurl+'/register',user);
-    }
+  login(user: any) {
+    return this.http.post(this.apiurl + '/authenticate', user);
+  }
+  getuser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+  getusername() {
+    const u = this.getuser();
+    return u?.userName || u?.username || null;
+  }
+  getrole() {
+    return this.getuser()?.role || null;
+  }
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
 
-    login(user:any){
-        return this.http.post(this.apiurl+'/authenticate',user);
-    }
-    getuser(){
-        const user=localStorage.getItem('user');
-        return user?JSON.parse(user):null;
-    }
-    getusername(){
-        return this.getuser().userName;
-    }
+    this.currentUser.set(null);
+
+    this.router.navigate(['/login'], {
+      replaceUrl: true,
+    });
+  }
 }

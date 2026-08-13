@@ -3,6 +3,7 @@ package com.example.jobtracker.ServiceImp;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.jobtracker.Dto.TrackerRequest;
@@ -22,22 +23,30 @@ public class TrackerServiceImp implements TrackerService {
     private final TrackerRepository trackerrepo;
     private final UserRepository userrepo;
 
+
+    private Users getEffectiveUser(){
+
+        String username=SecurityContextHolder.getContext().getAuthentication().getName();
+        Users currentUser = userrepo.findByEmail(username)
+                .or(() -> userrepo.findByUsername(username))
+                .orElseThrow(() -> new RuntimeException("current user not found"));
+        return currentUser;
+    }
+
     @Override
     public TrackerResponse createTracker(TrackerRequest request){
 
-        Users user=userrepo.findById(request.getUserId()).orElseThrow(()->new RuntimeException("User not found"));
+        Users effectiveUser = getEffectiveUser();
 
-        Trackers tracker1=Trackers.builder()
+        Trackers tracker1 = Trackers.builder()
             .trackerName(request.getTrackerName())
             .description(request.getDescription())
             .active(request.getActive())
-            .user(user)
+            .user(effectiveUser)
             .build();
         
-        Trackers saved=trackerrepo.save(tracker1);
+        Trackers saved = trackerrepo.save(tracker1);
         return todto(saved);
-
-
     }
 
 

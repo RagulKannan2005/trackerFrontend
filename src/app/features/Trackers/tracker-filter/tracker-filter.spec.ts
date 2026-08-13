@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CyberSecurity } from './cyber-security';
+import { TrackerFilter } from './tracker-filter';
 
-describe('CyberSecurity', () => {
-  let component: CyberSecurity;
-  let fixture: ComponentFixture<CyberSecurity>;
+describe('TrackerFilter', () => {
+  let component: TrackerFilter;
+  let fixture: ComponentFixture<TrackerFilter>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CyberSecurity],
+      imports: [TrackerFilter],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CyberSecurity);
+    fixture = TestBed.createComponent(TrackerFilter);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

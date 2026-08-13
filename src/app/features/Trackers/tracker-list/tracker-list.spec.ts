@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DevOps } from './dev-ops';
+import { TrackerList } from './tracker-list';
 
-describe('DevOps', () => {
-  let component: DevOps;
-  let fixture: ComponentFixture<DevOps>;
+describe('TrackerList', () => {
+  let component: TrackerList;
+  let fixture: ComponentFixture<TrackerList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DevOps],
+      imports: [TrackerList],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DevOps);
+    fixture = TestBed.createComponent(TrackerList);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

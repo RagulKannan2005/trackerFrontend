@@ -118,10 +118,10 @@
         <div class="avatar">RK</div>
         <div class="user-info">
           <span class="user-name">Ragul Kannan</span>
-          <span class="user-role">Head Coach</span>
+          <span class="user-role">{{Authservice.getrole()}}</span>
         </div>
       </div>
-      <div class="nav-links logout">
+      <div class="nav-links logout" (click)="Authservice.logout()">
         <span class="icon">🚪</span>
         <span class="text">Logout</span>
       </div>

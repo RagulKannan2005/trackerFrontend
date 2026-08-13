@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DotNet } from './dot-net';
+import { TrackerDetails } from './tracker-details';
 
-describe('DotNet', () => {
-  let component: DotNet;
-  let fixture: ComponentFixture<DotNet>;
+describe('TrackerDetails', () => {
+  let component: TrackerDetails;
+  let fixture: ComponentFixture<TrackerDetails>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DotNet],
+      imports: [TrackerDetails],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DotNet);
+    fixture = TestBed.createComponent(TrackerDetails);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -13,7 +13,7 @@ import com.example.jobtracker.Entity.Users;
 public interface UserRepository extends JpaRepository<Users,Long> {
     
     Optional<Users> findByEmail(String email);
-    
+    Optional<Users> findByUsername(String username);
     @Query("Select u from Users u where u.role = :role")
     List<Users> findByRole(String role);
 }

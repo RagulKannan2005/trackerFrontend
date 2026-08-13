@@ -44,7 +44,6 @@ public class CandidateServiceImp implements CandidateService {
         private final CandidateRepository candidaterepo;
         private final UserRepository userRepository;
         private final TrackerRepository trackerRepository;
-
         @Override
         @Transactional
         public CandidateResponse createCandidate(CandidateRequest data) {
@@ -233,10 +232,11 @@ public class CandidateServiceImp implements CandidateService {
                 if (authentication == null || !authentication.isAuthenticated()) {
                         throw new IllegalArgumentException("User authentication required");
                 }
-                String email = authentication.getName();
-                return userRepository.findByEmail(email)
+                String identity = authentication.getName();
+                return userRepository.findByEmail(identity)
+                                .or(() -> userRepository.findByUsername(identity))
                                 .orElseThrow(() -> new ResourceNotFoundException(
-                                                "Authenticated user not found with email: " + email));
+                                                "Authenticated user not found with identity: " + identity));
         }
 
         private boolean isAdmin(Users user) {

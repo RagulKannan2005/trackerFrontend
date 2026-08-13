@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +10,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
+  Authservice = inject(Auth);
 
   isTrackerOpen: boolean = false;
   selectedTracker: string = '';
@@ -22,8 +25,4 @@ export class Dashboard {
   selectTracker(tracker: string) {
     this.selectedTracker = tracker;
   }
-
 }
-
-
-

@@ -23,7 +23,4 @@ public class TrackerRequest {
 
     @NotNull(message = "active status is required")
     private Boolean active;
-
-    @NotNull(message = "User id is required")
-    private Long userId;
 }
