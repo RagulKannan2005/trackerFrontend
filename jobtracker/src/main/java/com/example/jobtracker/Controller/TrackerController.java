@@ -45,5 +45,11 @@ public class TrackerController {
         TrackerResponse response=trackerService.updateTracker(id,tracker);
         return ResponseEntity.ok(response);
     }
-    
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/gettracker/{id}")
+    public ResponseEntity<TrackerResponse> getTrackerById(@PathVariable Long id){
+        TrackerResponse response = trackerService.getTrackerById(id);
+        return ResponseEntity.ok(response);
+    }
 }

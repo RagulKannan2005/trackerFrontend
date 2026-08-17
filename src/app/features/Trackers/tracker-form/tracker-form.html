@@ -1,1 +1,49 @@
-<p>tracker-form works!</p>
+<div class="modal-backdrop">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>{{ isEditMode ? 'Edit Tracker' : 'Add New Tracker' }}</h3>
+      <button class="close-btn" (click)="onCancel()">✕</button>
+    </div>
+
+    <form [formGroup]="trackerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Tracker Name <span class="required">*</span></label>
+        <input
+          type="text"
+          formControlName="trackerName"
+          placeholder="e.g., Full Stack Java"
+        />
+        @if (trackerForm.get('trackerName')?.invalid && trackerForm.get('trackerName')?.touched) {
+          <span class="error-text">Tracker name is required (at least 3 characters).</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Description <span class="required">*</span></label>
+        <textarea
+          rows="3"
+          formControlName="description"
+          placeholder="Enter tracker description..."
+        ></textarea>
+        @if (trackerForm.get('description')?.invalid && trackerForm.get('description')?.touched) {
+          <span class="error-text">Description is required (max 250 characters).</span>
+        }
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label class="switch-label">
+          <input type="checkbox" formControlName="active" />
+          <span class="slider"></span>
+          Active Status
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn-submit">
+          {{ isEditMode ? 'Update Tracker' : 'Create Tracker' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

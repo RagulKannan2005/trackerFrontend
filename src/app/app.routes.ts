@@ -6,12 +6,14 @@ import { Home } from './Admin/home/home';
 import { TeamMember } from './Admin/team-member/team-member';
 import { FinalYear } from './Admin/final-year/final-year';
 import { Courseinfo } from './CommonPages/courseinfo/courseinfo';
+import { TrackerList } from './features/Trackers/tracker-list/tracker-list';
+import { TrackerDetails } from './features/Trackers/tracker-details/tracker-details';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
-  
+
   // Shared Admin Layout
   {
     path: 'admin',
@@ -19,11 +21,11 @@ export const routes: Routes = [
     children: [
       { path: 'home', component: Home },
       { path: 'team-member', component: TeamMember },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      {path:'final-year',component:FinalYear},
-      {path:'courseinfo',component:Courseinfo}
-
-
-    ]
-  }
+      { path: 'final-year', component: FinalYear },
+      { path: 'courseinfo', component: Courseinfo },
+      { path: 'trackers', component: TrackerList },
+      { path: 'trackers/:id', component: TrackerDetails },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+    ],
+  },
 ];

@@ -11,4 +11,6 @@ public interface TrackerService {
     List<TrackerResponse> getAllTrackers();
     TrackerResponse deleteTracker(Long id);
     TrackerResponse updateTracker(Long id,TrackerRequest tracker);
+    TrackerResponse getTrackerById(Long id);
 }
+

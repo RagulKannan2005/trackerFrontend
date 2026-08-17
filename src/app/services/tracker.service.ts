@@ -1,23 +1,34 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Tracker } from "../models/tracker.model";
+import { inject, Injectable } from "@angular/core";
+import { Tracker, TrackerRequest } from "../models/tracker.model";
+import { Observable } from "rxjs";
 
 @Injectable({
-    providedIn:'root'
+    providedIn: 'root'
 })
 
-export class TrackerService{
-    private apiurl='http://localhost:8081/api/v1/trackers'
+export class TrackerService {
 
-    constructor(private http:HttpClient){}
+    private http=inject(HttpClient);
+    private apiurl = 'http://localhost:8081/api/v1/trackers';
 
-    getAllTracker(){
-        return this.http.get<Tracker[]>(this.apiurl)
-    }
-    createTracker(tracker:Tracker){
-        return this.http.post<Tracker>(this.apiurl+'/addtracker',tracker)
-
+    getAllTracker():Observable<Tracker[]> {
+        return this.http.get<Tracker[]>(`${this.apiurl}/gettrackers`);
     }
 
-    
+    createTracker(tracker: TrackerRequest): Observable<Tracker> {
+        return this.http.post<Tracker>(`${this.apiurl}/addtracker`, tracker);
+    }
+
+    getTrackerById(id: Number): Observable<Tracker> {
+        return this.http.get<Tracker>(`${this.apiurl}/gettracker/${id}`);
+    }
+
+    updateTracker(id: number, tracker: TrackerRequest):Observable<Tracker> {
+        return this.http.put<Tracker>(`${this.apiurl}/updatetracker/${id}`, tracker);
+    }
+
+    deleteTracker(id: number): Observable<Tracker> {
+        return this.http.delete<Tracker>(`${this.apiurl}/deletetracker/${id}`);
+    }
 }

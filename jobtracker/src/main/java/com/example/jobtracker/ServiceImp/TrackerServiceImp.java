@@ -49,6 +49,12 @@ public class TrackerServiceImp implements TrackerService {
         return todto(saved);
     }
 
+    @Override
+    public TrackerResponse getTrackerById(Long id){
+        Trackers tr = trackerrepo.findById(id).orElseThrow(() -> new RuntimeException("Tracker not found"));
+        return todto(tr);
+    }
+
 
     @Override
     public TrackerResponse deleteTracker(Long id){

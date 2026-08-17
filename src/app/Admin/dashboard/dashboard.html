@@ -33,51 +33,17 @@
     </div>
 
     <!-- Trackers Accordion Item -->
+    <!-- Trackers Accordion Item -->
     <div class="nav-accordion" [class.expanded]="isTrackerOpen">
-      <div class="nav-links nav-accordion-header" (click)="toggleTrackerMenu($event)">
+      <div
+        class="nav-links nav-accordion-header"
+        (click)="toggleTrackerMenu($event)"
+        routerLink="/admin/trackers"
+      >
         <span class="icon">📈</span>
         <span class="text">Trackers</span>
-        <span class="nav-badge green">12 Live</span>
-        <span class="accordion-arrow" [class.open]="isTrackerOpen">❯</span>
+        <span class="nav-badge green">Manage</span>
       </div>
-
-      @if (isTrackerOpen) {
-        <div class="submenu-container">
-          <div
-            routerLink="/admin/java"
-            class="submenu-item"
-            [class.active]="selectedTracker === 'Java'"
-            (click)="selectTracker('Java')"
-          >
-            <!-- <span class="submenu-bullet">•</span> -->
-            <span class="submenu-text">Java</span>
-          </div>
-          <div
-            class="submenu-item"
-            [class.active]="selectedTracker === '.NET'"
-            (click)="selectTracker('.NET')" routerLink="/admin/dotnet"
-          >
-            <!-- <span class="submenu-bullet">•</span> -->
-            <span class="submenu-text" >.NET</span>
-          </div>
-          <div
-            class="submenu-item"
-            [class.active]="selectedTracker === 'Cyber Security'"
-            (click)="selectTracker('Cyber Security')" routerLink="/admin/cybersecurity"
-          >
-            <!-- <span class="submenu-bullet">•</span> -->
-            <span class="submenu-text" >Cyber Security</span>
-          </div>
-          <div
-            class="submenu-item"
-            [class.active]="selectedTracker === 'DevOps'"
-            (click)="selectTracker('DevOps')" routerLink="/admin/devops"
-          >
-            <!-- <span class="submenu-bullet">•</span> -->
-            <span class="submenu-text" >DevOps</span>
-          </div>
-        </div>
-      }
     </div>
 
     <div class="nav-section-title">MANAGEMENT</div>
@@ -118,7 +84,7 @@
         <div class="avatar">RK</div>
         <div class="user-info">
           <span class="user-name">Ragul Kannan</span>
-          <span class="user-role">{{Authservice.getrole()}}</span>
+          <span class="user-role">{{ Authservice.getrole() }}</span>
         </div>
       </div>
       <div class="nav-links logout" (click)="Authservice.logout()">

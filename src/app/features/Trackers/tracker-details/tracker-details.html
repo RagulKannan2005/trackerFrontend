@@ -1,1 +1,25 @@
-<p>tracker-details works!</p>
+<div class="details-container">
+  <button class="back-btn" (click)="goBack()">← Back to Trackers</button>
+
+  @if (isLoading) {
+    <div class="loading">Loading details...</div>
+  } @else if (tracker) {
+    <div class="details-card">
+      <div class="card-header">
+        <h2>{{ tracker.trackerName }}</h2>
+        <span class="badge" [class.badge-active]="tracker.active" [class.badge-inactive]="!tracker.active">
+          {{ tracker.active ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+      <p class="tracker-desc">{{ tracker.description }}</p>
+      <hr />
+
+      <div class="sections-preview">
+        <h3>Tracker Sections & Topics</h3>
+        <p class="placeholder-text">Sections and progress tracking for this subject will appear here.</p>
+      </div>
+    </div>
+  } @else {
+    <div class="error">Tracker not found.</div>
+  }
+</div>
