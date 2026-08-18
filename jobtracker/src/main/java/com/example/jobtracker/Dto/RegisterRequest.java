@@ -27,6 +27,6 @@ public class RegisterRequest {
     @NotNull(message = "Role is required")
     private Role role;
 
-    private boolean active;
+    private Boolean active;
 }
 

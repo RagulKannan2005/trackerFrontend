@@ -1,1 +1,94 @@
-<p>section-deatils works!</p>
+<div class="details-container">
+  <button class="back-btn" (click)="goBack()">← Back to Sections</button>
+
+  @if (isLoading) {
+    <div class="loading">Loading details...</div>
+  } @else if (errorMessage) {
+    <div class="error">{{ errorMessage }}</div>
+  } @else if (section) {
+    <div class="details-card">
+      <div class="card-header">
+        <h2>{{ section.sectionName }}</h2>
+        <span
+          class="badge"
+          [class.badge-active]="section.active"
+          [class.badge-inactive]="!section.active"
+        >
+          {{ section.active ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+      <p class="section-desc">{{ section.description }}</p>
+      <hr />
+
+      <div class="skills-container">
+        <div class="skills-header">
+          <h3>Assigned Skills</h3>
+          @if (isAdmin()) {
+            <button class="btn-assign" (click)="openAssignSkillModal()">
+              + Assign Skill
+            </button>
+          }
+        </div>
+
+        @if (assignedSkills.length === 0) {
+          <p class="no-skills">No skills assigned to this section yet.</p>
+        }
+
+        <div class="skills-list">
+          @for (skill of assignedSkills; track skill.id ?? $index) {
+            <div class="skill-card">
+              <div class="skill-order">#{{ skill.displayOrder }}</div>
+              <div class="skill-info">
+                <h4>{{ skill.skillName }}</h4>
+                <p>{{ skill.description }}</p>
+              </div>
+              @if (isAdmin()) {
+                <button class="btn-remove" (click)="removeSkill(skill.id)" title="Remove skill">
+                  🗑️ Remove
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="error">Section not found</div>
+  }
+</div>
+
+<!-- Assign Skill Modal -->
+@if (isAssignModalOpen) {
+  <div class="modal-backdrop" (click)="closeAssignModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Assign Skill to {{ section?.sectionName }}</h3>
+        <button class="close-btn" type="button" (click)="closeAssignModal()">✕</button>
+      </div>
+
+      <form (ngSubmit)="saveAssignSkill()">
+        <div class="form-group">
+          <label>Select Skill <span class="required">*</span></label>
+          <select [(ngModel)]="selectedSkillId" name="selectedSkillId" required>
+            <option [ngValue]="null" disabled>-- Choose a skill --</option>
+            @for (sk of availableSkills; track sk.id ?? $index) {
+              <option [value]="sk.id">{{ sk.skillName }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Display Order</label>
+          <input type="number" [(ngModel)]="displayOrder" name="displayOrder" min="1" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeAssignModal()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="!selectedSkillId || isSubmitting">
+            {{ isSubmitting ? 'Assigning...' : 'Assign Skill' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

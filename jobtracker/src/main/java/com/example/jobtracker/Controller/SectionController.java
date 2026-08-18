@@ -52,6 +52,12 @@ public class SectionController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getSection/{id}")
+    public ResponseEntity<SectionResponse> getSectionById(@PathVariable Long id){
+        return ResponseEntity.ok(sectionService.getSectionById(id));
+    }
+
     
 
 

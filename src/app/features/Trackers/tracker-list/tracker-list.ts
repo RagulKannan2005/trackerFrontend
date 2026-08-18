@@ -33,19 +33,25 @@ export class TrackerList implements OnInit {
   }
 
   isAdmin(): boolean {
-    return this.authService.getrole() === 'ADMIN';
+    const role = this.authService.getrole();
+    if (!role) return true;
+    const r = String(role).toUpperCase();
+    return r === 'ADMIN' || r === 'ROLE_ADMIN' || r.includes('ADMIN');
   }
+
+  currentFilters = { searchTerm: '', statusFilter: 'ALL' };
 
   loadTrackers() {
     this.isLoading = true;
+    this.errorMessage = '';
     this.trackerService.getAllTracker().subscribe({
       next: (data) => {
-        this.trackers = data;
-        this.filteredTrackers = data;
+        this.trackers = data || [];
+        this.applyFilters();
         this.isLoading = false;
       },
       error: (err) => {
-        this.errorMessage = 'Failed to load trackers from server.';
+        this.errorMessage = err?.error?.message || err?.message || 'Failed to load trackers from server.';
         this.isLoading = false;
         console.error(err);
       },
@@ -53,21 +59,26 @@ export class TrackerList implements OnInit {
   }
 
   onFilterChange(filters: { searchTerm: string; statusFilter: string }) {
-    let result = this.trackers;
+    this.currentFilters = filters || { searchTerm: '', statusFilter: 'ALL' };
+    this.applyFilters();
+  }
 
-    if (filters.searchTerm.trim()) {
-      const term = filters.searchTerm.toLowerCase();
+  applyFilters() {
+    let result = [...(this.trackers || [])];
+
+    if (this.currentFilters?.searchTerm?.trim()) {
+      const term = this.currentFilters.searchTerm.toLowerCase().trim();
       result = result.filter(
         (t) =>
-          t.trackerName.toLowerCase().includes(term) ||
-          t.description.toLowerCase().includes(term)
+          (t?.trackerName ? String(t.trackerName).toLowerCase() : '').includes(term) ||
+          (t?.description ? String(t.description).toLowerCase() : '').includes(term)
       );
     }
 
-    if (filters.statusFilter === 'ACTIVE') {
-      result = result.filter((t) => t.active);
-    } else if (filters.statusFilter === 'INACTIVE') {
-      result = result.filter((t) => !t.active);
+    if (this.currentFilters?.statusFilter === 'ACTIVE') {
+      result = result.filter((t) => Boolean(t?.active) === true);
+    } else if (this.currentFilters?.statusFilter === 'INACTIVE') {
+      result = result.filter((t) => Boolean(t?.active) === false);
     }
 
     this.filteredTrackers = result;
@@ -124,10 +135,10 @@ export class TrackerList implements OnInit {
   }
 
   get activeCount(): number {
-    return this.trackers.filter((t) => t.active).length;
+    return (this.trackers || []).filter((t) => Boolean(t?.active)).length;
   }
 
   get inactiveCount(): number {
-    return this.trackers.filter((t) => !t.active).length;
+    return (this.trackers || []).filter((t) => !Boolean(t?.active)).length;
   }
 }

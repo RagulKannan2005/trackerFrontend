@@ -13,9 +13,9 @@ public class TrackerSectionResponse {
 
     private Long id;
     private Long trackerId;
+    private String trackerName;
     private Long sectionId;
+    private String sectionName;
+    private String description;
     private Integer displayOrder;
-
-    // private String trackerName;
-    // private String sectionName;
 }

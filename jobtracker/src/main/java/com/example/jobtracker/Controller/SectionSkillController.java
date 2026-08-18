@@ -25,32 +25,31 @@ import lombok.RequiredArgsConstructor;
 public class SectionSkillController {
 
     private final SectionSkillService sectionSkillService;
-    
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<SectionSkillResponse>> getSectionSkills(){
+    public ResponseEntity<List<SectionSkillResponse>> getSectionSkills() {
         return ResponseEntity.ok(sectionSkillService.getSectionSkills());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public ResponseEntity<SectionSkillResponse> createSectionSkill(@RequestBody SectionSkillRequest request){
+    public ResponseEntity<SectionSkillResponse> createSectionSkill(@RequestBody SectionSkillRequest request) {
         return ResponseEntity.ok(sectionSkillService.createSectionSkill(request));
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{id}")
-    public ResponseEntity<SectionSkillResponse> updateSectionSkill(@PathVariable Long id ,@RequestBody SectionSkillRequest request){
+    public ResponseEntity<SectionSkillResponse> updateSectionSkill(@PathVariable Long id,
+            @RequestBody SectionSkillRequest request) {
         return ResponseEntity.ok(sectionSkillService.updateSectionSkill(id, request));
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteSectionSkill(@PathVariable Long id){
+    public ResponseEntity<Void> deleteSectionSkill(@PathVariable Long id) {
         sectionSkillService.deleteSectionSkill(id);
         return ResponseEntity.noContent().build();
     }
 
-    
-
-    
-    
 }

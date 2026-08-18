@@ -1,6 +1,7 @@
 package com.example.jobtracker.ServiceImp;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.jobtracker.Service.TrackerSectionService;
 import com.example.jobtracker.Dto.TrackerSectionRequest;
@@ -15,6 +16,7 @@ import com.example.jobtracker.Repository.TrackerSectionRepository;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class TrackerSectionImp implements TrackerSectionService {
@@ -25,8 +27,10 @@ public class TrackerSectionImp implements TrackerSectionService {
 
     @Override
     public TrackerSectionResponse assignSectionToTracker(TrackerSectionRequest request) {
-        Trackers tracker=trackersRepo.findById(request.getTrackerId()).orElseThrow(()->new RuntimeException("tracker id Not Found"));
-        Section section=sectionRepo.findById(request.getSectionId()).orElseThrow(()->new RuntimeException("section id Not Found"));
+        Trackers tracker = trackersRepo.findById(request.getTrackerId())
+                .orElseThrow(() -> new RuntimeException("tracker id Not Found"));
+        Section section = sectionRepo.findById(request.getSectionId())
+                .orElseThrow(() -> new RuntimeException("section id Not Found"));
 
         TrackerSection ts = TrackerSection.builder()
                 .tracker(tracker)
@@ -40,26 +44,30 @@ public class TrackerSectionImp implements TrackerSectionService {
 
     @Override
     public List<TrackerSectionResponse> getSectionsByTracker(Long trackerId) {
-        return trackerSectionrepo.findByTrackerId(trackerId).stream()
+        return trackerSectionrepo.findByTrackerIdOrderByDisplayOrderAsc(trackerId).stream()
                 .map(this::toDto)
                 .toList();
     }
 
     @Override
-    public TrackerSectionResponse getTrackerSectionById(Long id){
-        TrackerSection ts=trackerSectionrepo.findById(id).orElseThrow(()->new RuntimeException("Tracker Section not found"));
+    public TrackerSectionResponse getTrackerSectionById(Long id) {
+        TrackerSection ts = trackerSectionrepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tracker Section not found"));
         return toDto(ts);
     }
 
     @Override
     public TrackerSectionResponse updateTrackerSection(Long id, TrackerSectionRequest request) {
-        TrackerSection ts = trackerSectionrepo.findById(id).orElseThrow(() -> new RuntimeException("Tracker Section not found"));
+        TrackerSection ts = trackerSectionrepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tracker Section not found"));
         if (request.getTrackerId() != null) {
-            Trackers tracker = trackersRepo.findById(request.getTrackerId()).orElseThrow(() -> new RuntimeException("tracker id Not Found"));
+            Trackers tracker = trackersRepo.findById(request.getTrackerId())
+                    .orElseThrow(() -> new RuntimeException("tracker id Not Found"));
             ts.setTracker(tracker);
         }
         if (request.getSectionId() != null) {
-            Section section = sectionRepo.findById(request.getSectionId()).orElseThrow(() -> new RuntimeException("section id Not Found"));
+            Section section = sectionRepo.findById(request.getSectionId())
+                    .orElseThrow(() -> new RuntimeException("section id Not Found"));
             ts.setSection(section);
         }
         if (request.getDisplayOrder() != null) {
@@ -75,15 +83,23 @@ public class TrackerSectionImp implements TrackerSectionService {
             throw new RuntimeException("Tracker Section not found");
         }
         trackerSectionrepo.deleteById(id);
-    }   
-
-    TrackerSectionResponse toDto(TrackerSection ts){
-        return TrackerSectionResponse.builder()
-        .id(ts.getId())
-        .trackerId(ts.getTracker().getId())
-        .sectionId(ts.getSection().getId())
-        .displayOrder(ts.getDisplayOrder())
-        .build();
     }
-    
+
+    @Override
+    @Transactional
+    public void removeSectionByTrackerAndSection(Long trackerId, Long sectionId) {
+        trackerSectionrepo.deleteByTrackerIdAndSectionId(trackerId, sectionId);
+    }
+
+    TrackerSectionResponse toDto(TrackerSection ts) {
+        return TrackerSectionResponse.builder()
+                .id(ts.getId())
+                .trackerId(ts.getTracker() != null ? ts.getTracker().getId() : null)
+                .trackerName(ts.getTracker() != null ? ts.getTracker().getTrackerName() : null)
+                .sectionId(ts.getSection() != null ? ts.getSection().getId() : null)
+                .sectionName(ts.getSection() != null ? ts.getSection().getSectionName() : null)
+                .description(ts.getSection() != null ? ts.getSection().getDescription() : null)
+                .displayOrder(ts.getDisplayOrder())
+                .build();
+    }
 }

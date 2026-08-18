@@ -1,0 +1,409 @@
+/* ================================
+   PAGE CONTAINER
+================================ */
+
+.page-container {
+  padding: 24px;
+  background-color: #f5f7fb;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+
+/* ================================
+   PAGE HEADER
+================================ */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* ================================
+   PRIMARY BUTTON
+================================ */
+
+.button-primary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border: none;
+  padding: 11px 18px;
+  border-radius: 8px;
+
+  background-color: #4f46e5;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.button-primary:hover {
+  background-color: #4338ca;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(79, 70, 229, 0.25);
+}
+
+.button-primary:active {
+  transform: translateY(0);
+}
+
+
+/* ================================
+   METRICS GRID
+================================ */
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  background-color: white;
+
+  padding: 20px;
+  border-radius: 12px;
+
+  border: 1px solid #e5e7eb;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  transition: all 0.25s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ================================
+   METRIC ICON
+================================ */
+
+.metric-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  font-size: 22px;
+}
+
+.metric-icon.purple {
+  background-color: #ede9fe;
+}
+
+.metric-icon.green {
+  background-color: #dcfce7;
+}
+
+.metric-icon.gray {
+  background-color: #f3f4f6;
+}
+
+
+/* ================================
+   METRIC TEXT
+================================ */
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.metric-label {
+  margin-top: 3px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+
+/* ================================
+   FILTER COMPONENT
+================================ */
+
+app-section-filter {
+  display: block;
+  margin-bottom: 20px;
+}
+
+
+/* ================================
+   TABLE CARD
+================================ */
+
+.table-card {
+  background-color: white;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  overflow-x: auto;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* ================================
+   TABLE
+================================ */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 750px;
+}
+
+.data-table thead {
+  background-color: #f9fafb;
+}
+
+.data-table th {
+  padding: 14px 16px;
+
+  text-align: left;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #374151;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.data-table td {
+  padding: 15px 16px;
+
+  font-size: 14px;
+  color: #4b5563;
+
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* ================================
+/* ================================
+   TEXT HELPERS & STATUS BADGES
+================================ */
+
+.font-bold {
+  font-weight: 600;
+  color: #111827;
+}
+
+.text-secondary {
+  color: #6b7280;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-active {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.badge-inactive {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+
+/* ================================
+   ACTION BUTTONS
+================================ */
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.action-btn.btn-view {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.action-btn.btn-view:hover {
+  background-color: #c7d2fe;
+  color: #3730a3;
+  transform: translateY(-1px);
+}
+
+.action-btn.btn-edit {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.action-btn.btn-edit:hover {
+  background-color: #fde68a;
+  color: #b45309;
+  transform: translateY(-1px);
+}
+
+.action-btn.btn-delete {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.action-btn.btn-delete:hover {
+  background-color: #fca5a5;
+  color: #991b1b;
+  transform: translateY(-1px);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+  color: #6b7280;
+  font-size: 14px;
+  font-style: italic;
+}
+
+
+/* ================================
+   LOADING
+================================ */
+
+.loading-spinner {
+  padding: 30px;
+
+  text-align: center;
+
+  background-color: white;
+
+  border-radius: 10px;
+
+  color: #6b7280;
+
+  font-size: 15px;
+}
+
+
+/* ================================
+   ERROR
+================================ */
+
+.error-banner {
+  padding: 14px 18px;
+
+  background-color: #fef2f2;
+
+  border: 1px solid #fecaca;
+
+  border-radius: 8px;
+
+  color: #b91c1c;
+
+  font-size: 14px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  .page-container {
+    padding: 15px;
+  }
+
+  .page-header {
+    flex-direction: column;
+  }
+
+  .button-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .metric-card {
+    padding: 16px;
+  }
+
+  .data-table {
+    min-width: 700px;
+  }
+
+}

@@ -1,0 +1,51 @@
+<div class="modal-backdrop" (click)="onCancel()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ isEditMode ? 'Edit Skill' : 'Add New Skill' }}</h3>
+      <button class="close-btn" type="button" (click)="onCancel()" title="Close">✕</button>
+    </div>
+
+    <form [formGroup]="skillForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="skillName">Skill Name <span class="required">*</span></label>
+        <input
+          id="skillName"
+          type="text"
+          formControlName="skillName"
+          placeholder="e.g., Java Spring Boot, Angular, PostgreSQL"
+        />
+        @if (skillForm.get('skillName')?.invalid && skillForm.get('skillName')?.touched) {
+          <span class="error-text">Skill name is required.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description <span class="required">*</span></label>
+        <textarea
+          id="description"
+          rows="3"
+          formControlName="description"
+          placeholder="Enter skill details and topics..."
+        ></textarea>
+        @if (skillForm.get('description')?.invalid && skillForm.get('description')?.touched) {
+          <span class="error-text">Description is required.</span>
+        }
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label class="switch-label">
+          <input type="checkbox" formControlName="active" />
+          <span class="slider"></span>
+          Active Status
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn-submit" [disabled]="skillForm.invalid">
+          {{ isEditMode ? 'Update Skill' : 'Create Skill' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

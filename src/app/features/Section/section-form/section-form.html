@@ -1,1 +1,55 @@
-<p>section-form works!</p>
+<div class="modal-backdrop">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>{{ isEditMode ? 'Edit Section' : 'Add Section' }}</h3>
+      <button class="close-btn" type="button" (click)="onCancel()">✕</button>
+    </div>
+
+    <form [formGroup]="sectionForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Section Name <span class="required">*</span></label>
+        <input
+          type="text"
+          formControlName="sectionName"
+          placeholder="e.g., Backend Section"
+        />
+        @if (sectionForm.get('sectionName')?.invalid && sectionForm.get('sectionName')?.touched) {
+          <span class="error-text">
+            Section name is required (at least 3 characters)
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Description <span class="required">*</span></label>
+        <input
+          type="text"
+          formControlName="description"
+          placeholder="e.g., Backend Section details"
+        />
+        @if (sectionForm.get('description')?.invalid && sectionForm.get('description')?.touched) {
+          <span class="error-text">
+            Description is required (at least 10 characters and at most 250 characters)
+          </span>
+        }
+      </div>
+
+      <div class="form-group checkbox-group">
+        <label class="switch-label">
+          <input type="checkbox" formControlName="active" />
+          <span class="slider"></span>
+          Active Status
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-submit">
+          {{ isEditMode ? 'Update Section' : 'Create Section' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -28,11 +28,18 @@ public class SkillsController {
     private final SkillsService skillsService;
 
     
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/allSkills")
     public ResponseEntity<List<SkillsResponse>> getAllSkills(){
         List<SkillsResponse> skills = skillsService.getAllSkills();
         return ResponseEntity.ok(skills);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/getSkill/{id}")
+    public ResponseEntity<SkillsResponse> getSkillById(@PathVariable Long id){
+        SkillsResponse skill = skillsService.getSkillById(id);
+        return ResponseEntity.ok(skill);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

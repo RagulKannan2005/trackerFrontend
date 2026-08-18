@@ -9,5 +9,6 @@ public interface SectionService {
     SectionResponse createSection(SectionRequest sec);
     List<SectionResponse> getallSection();  
     SectionResponse updateSection(Long id,SectionRequest sec);
-    void deleteSection(Long id);  
+    void deleteSection(Long id);
+    SectionResponse getSectionById(Long id);
 }

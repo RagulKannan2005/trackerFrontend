@@ -33,10 +33,14 @@ public class SectionSkill {
     private Long id;
     @ManyToOne
     @JoinColumn(name="trackersection_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private TrackerSection trackerSection;
 
     @ManyToOne
     @JoinColumn(name="skill_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Skills skill;
 
     @Column(name="display_order",nullable = false)

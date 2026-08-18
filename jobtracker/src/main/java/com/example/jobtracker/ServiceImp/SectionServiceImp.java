@@ -50,6 +50,12 @@ public class SectionServiceImp implements SectionService {
         sectionrepo.deleteById(id);
     }
 
+    @Override
+    public SectionResponse getSectionById(Long id) {
+        Section section = sectionrepo.findById(id).orElseThrow(() -> new RuntimeException("Section not found"));
+        return todto(section);
+    }
+
     SectionResponse todto(Section s) {
         return SectionResponse.builder()
                 .id(s.getId())

@@ -1,1 +1,35 @@
-<p>section-filter works!</p>
+<div class="filter-bar">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input
+      type="text"
+      placeholder="Search sections by name or description..."
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchChange()"
+    />
+  </div>
+
+  <div class="filter-pills">
+    <button
+      class="pill-btn"
+      [class.active]="statusFilter === 'ALL'"
+      (click)="onStatusChange('ALL')"
+    >
+      All
+    </button>
+    <button
+      class="pill-btn"
+      [class.active]="statusFilter === 'ACTIVE'"
+      (click)="onStatusChange('ACTIVE')"
+    >
+      Active
+    </button>
+    <button
+      class="pill-btn"
+      [class.active]="statusFilter === 'INACTIVE'"
+      (click)="onStatusChange('INACTIVE')"
+    >
+      Inactive
+    </button>
+  </div>
+</div>

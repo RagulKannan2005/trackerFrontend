@@ -8,6 +8,9 @@ import { FinalYear } from './Admin/final-year/final-year';
 import { Courseinfo } from './CommonPages/courseinfo/courseinfo';
 import { TrackerList } from './features/Trackers/tracker-list/tracker-list';
 import { TrackerDetails } from './features/Trackers/tracker-details/tracker-details';
+import { SectionList } from './features/Section/section-list/section-list';
+import { SectionDeatils } from './features/Section/section-deatils/section-deatils';
+import { SkillList } from './features/Skills/skill-list/skill-list';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,6 +28,9 @@ export const routes: Routes = [
       { path: 'courseinfo', component: Courseinfo },
       { path: 'trackers', component: TrackerList },
       { path: 'trackers/:id', component: TrackerDetails },
+      { path: 'sections', component: SectionList },
+      { path: 'sections/:id', component: SectionDeatils },
+      { path: 'skills', component: SkillList },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
     ],
   },

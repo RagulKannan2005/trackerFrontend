@@ -36,7 +36,7 @@ export class Login {
             role:response.role,
           })
         )
-        if(response.role==='ADMIN'){
+        if (response?.token) {
           this.router.navigate(['/admin/home']);
         }
         console.log('login successfull');

@@ -80,6 +80,8 @@ public class Candidate {
 
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Users user;
 
     @Column(name = "createdAt", nullable = false)

@@ -3,23 +3,98 @@
 
   @if (isLoading) {
     <div class="loading">Loading details...</div>
+  } @else if (errorMessage) {
+    <div class="error">{{ errorMessage }}</div>
   } @else if (tracker) {
     <div class="details-card">
       <div class="card-header">
         <h2>{{ tracker.trackerName }}</h2>
-        <span class="badge" [class.badge-active]="tracker.active" [class.badge-inactive]="!tracker.active">
+        <span
+          class="badge"
+          [class.badge-active]="tracker.active"
+          [class.badge-inactive]="!tracker.active"
+        >
           {{ tracker.active ? 'Active' : 'Inactive' }}
         </span>
       </div>
       <p class="tracker-desc">{{ tracker.description }}</p>
       <hr />
 
-      <div class="sections-preview">
-        <h3>Tracker Sections & Topics</h3>
-        <p class="placeholder-text">Sections and progress tracking for this subject will appear here.</p>
+      <div class="sections-container">
+        <div class="sections-header">
+          <h3>Assigned Sections</h3>
+          @if (isAdmin()) {
+            <button class="btn-assign" (click)="openAssignSection()">+ Assign Section</button>
+          }
+        </div>
+
+        @if (sections.length === 0) {
+          <p class="no-sections">No sections assigned to this tracker yet.</p>
+        }
+
+        <div class="sections-list">
+          @for (section of sections; track section.id ?? $index) {
+            <div class="section-card">
+              <div class="section-order">#{{ section.displayOrder }}</div>
+
+              <div class="section-info">
+                <h4>{{ section.sectionName }}</h4>
+                <p>{{ section.description }}</p>
+              </div>
+
+              @if (isAdmin()) {
+                <div class="section-actions">
+                  <button
+                    class="btn-remove"
+                    (click)="removeSection(section.id)"
+                    title="Remove section from tracker"
+                  >
+                    🗑️ Remove
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
       </div>
     </div>
   } @else {
     <div class="error">Tracker not found.</div>
   }
 </div>
+
+<!-- Assign Section Modal -->
+@if (isAssignModalOpen) {
+  <div class="modal-backdrop" (click)="closeAssignModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Assign Section to {{ tracker?.trackerName }}</h3>
+        <button class="close-btn" type="button" (click)="closeAssignModal()">✕</button>
+      </div>
+
+      <form (ngSubmit)="saveAssignSection()">
+        <div class="form-group">
+          <label>Select Section <span class="required">*</span></label>
+          <select [(ngModel)]="selectedSectionId" name="selectedSectionId" required>
+            <option [ngValue]="null" disabled>-- Choose a section --</option>
+            @for (sec of availableSections; track sec.id ?? $index) {
+              <option [value]="sec.id">{{ sec.sectionName }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Display Order</label>
+          <input type="number" [(ngModel)]="displayOrder" name="displayOrder" min="1" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeAssignModal()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="!selectedSectionId || isSubmitting">
+            {{ isSubmitting ? 'Assigning...' : 'Assign Section' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

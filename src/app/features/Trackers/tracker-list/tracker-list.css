@@ -27,7 +27,44 @@
 .badge-active { background: #dcfce7; color: #166534; }
 .badge-inactive { background: #f1f5f9; color: #64748b; }
 
-.actions-cell { display: flex; gap: 8px; justify-content: flex-end; }
-.action-btn { border: none; background: #f8fafc; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
-.action-btn:hover { background: #e2e8f0; }
+.actions-cell { display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
+.action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+.action-btn.btn-view {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+.action-btn.btn-view:hover {
+  background: #c7d2fe;
+  color: #3730a3;
+  transform: translateY(-1px);
+}
+.action-btn.btn-edit {
+  background: #fef3c7;
+  color: #d97706;
+}
+.action-btn.btn-edit:hover {
+  background: #fde68a;
+  color: #b45309;
+  transform: translateY(-1px);
+}
+.action-btn.btn-delete {
+  background: #fee2e2;
+  color: #dc2626;
+}
+.action-btn.btn-delete:hover {
+  background: #fca5a5;
+  color: #991b1b;
+  transform: translateY(-1px);
+}
+
 .empty-state { text-align: center; color: #94a3b8; padding: 32px; }

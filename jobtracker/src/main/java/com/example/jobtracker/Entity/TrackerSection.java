@@ -33,10 +33,14 @@ public class TrackerSection {
 
     @ManyToOne
     @JoinColumn(name = "tracker_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Trackers tracker;
 
     @ManyToOne
     @JoinColumn(name = "section_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Section section;
 
 

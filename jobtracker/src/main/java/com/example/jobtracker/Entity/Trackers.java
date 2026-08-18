@@ -51,6 +51,8 @@ public class Trackers {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Users user;
 
     @OneToMany(mappedBy = "tracker", cascade = CascadeType.ALL)
@@ -59,6 +61,8 @@ public class Trackers {
     private List<Candidate> candidates;
 
     @OneToMany(mappedBy = "tracker",cascade=CascadeType.ALL,orphanRemoval=true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<TrackerSection> trackerSections;
     
 

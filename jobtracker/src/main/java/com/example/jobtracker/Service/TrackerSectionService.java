@@ -17,4 +17,5 @@ public interface TrackerSectionService {
 
     void removeSectionFromTracker(Long id);
 
+    void removeSectionByTrackerAndSection(Long trackerId, Long sectionId);
 }
