@@ -55,7 +55,8 @@ public class GoogleMeetServiceImpl implements GoogleMeetService {
         String clientSecret = googleConfig.getClientSecret() != null ? googleConfig.getClientSecret().trim() : "";
 
         if (refreshToken.isEmpty() || clientId.isEmpty() || clientSecret.isEmpty()) {
-            throw new IllegalArgumentException("Google OAuth credentials (client.id, client.secret, refresh.token) must not be empty in application.properties");
+            throw new IllegalArgumentException(
+                    "Google OAuth credentials (client.id, client.secret, refresh.token) must not be empty in application.properties");
         }
 
         String formBody = "grant_type=refresh_token"
@@ -162,14 +163,18 @@ public class GoogleMeetServiceImpl implements GoogleMeetService {
                     .execute();
 
             String meetLink = createdEvent.getHangoutLink();
-            if (meetLink == null && createdEvent.getConferenceData() != null 
-                    && createdEvent.getConferenceData().getEntryPoints() != null 
+            if (meetLink == null && createdEvent.getConferenceData() != null
+                    && createdEvent.getConferenceData().getEntryPoints() != null
                     && !createdEvent.getConferenceData().getEntryPoints().isEmpty()) {
                 meetLink = createdEvent.getConferenceData().getEntryPoints().get(0).getUri();
             }
 
-            String startDateStr = createdEvent.getStart() != null && createdEvent.getStart().getDateTime() != null ? createdEvent.getStart().getDateTime().toString() : request.getStartDateTime();
-            String endDateStr = createdEvent.getEnd() != null && createdEvent.getEnd().getDateTime() != null ? createdEvent.getEnd().getDateTime().toString() : request.getEndDateTime();
+            String startDateStr = createdEvent.getStart() != null && createdEvent.getStart().getDateTime() != null
+                    ? createdEvent.getStart().getDateTime().toString()
+                    : request.getStartDateTime();
+            String endDateStr = createdEvent.getEnd() != null && createdEvent.getEnd().getDateTime() != null
+                    ? createdEvent.getEnd().getDateTime().toString()
+                    : request.getEndDateTime();
             String participantsStr = String.join(", ", attendeeEmailList);
 
             // Save meeting to database
@@ -179,8 +184,10 @@ public class GoogleMeetServiceImpl implements GoogleMeetService {
                     .description(createdEvent.getDescription())
                     .startDateTime(startDateStr)
                     .endDateTime(endDateStr)
-                    .date(startDateStr != null && startDateStr.contains("T") ? startDateStr.split("T")[0] : startDateStr)
-                    .time(startDateStr != null && startDateStr.contains("T") ? startDateStr.split("T")[1] : startDateStr)
+                    .date(startDateStr != null && startDateStr.contains("T") ? startDateStr.split("T")[0]
+                            : startDateStr)
+                    .time(startDateStr != null && startDateStr.contains("T") ? startDateStr.split("T")[1]
+                            : startDateStr)
                     .participants(participantsStr)
                     .meetingLink(meetLink)
                     .htmlLink(createdEvent.getHtmlLink())
@@ -206,10 +213,43 @@ public class GoogleMeetServiceImpl implements GoogleMeetService {
     }
 
     @Override
+    public MeetingResponse updateMeet(Long id, MeetingRequest meet) {
+        Meeting meeting = meetingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Meeting not found with id: " + id));
+
+        if (meet.getSummary() != null) {
+            meeting.setSummary(meet.getSummary());
+        }
+        if (meet.getDescription() != null) {
+            meeting.setDescription(meet.getDescription());
+        }
+        if (meet.getStartDateTime() != null) {
+            meeting.setStartDateTime(meet.getStartDateTime());
+            String startDateStr = meet.getStartDateTime();
+            meeting.setDate(startDateStr.contains("T") ? startDateStr.split("T")[0] : startDateStr);
+            meeting.setTime(startDateStr.contains("T") ? startDateStr.split("T")[1] : startDateStr);
+        }
+        if (meet.getEndDateTime() != null) {
+            meeting.setEndDateTime(meet.getEndDateTime());
+        }
+        if (meet.getAttendeeEmails() != null && !meet.getAttendeeEmails().isEmpty()) {
+            meeting.setParticipants(String.join(", ", meet.getAttendeeEmails()));
+        }
+
+        return mapToResponse(meetingRepository.save(meeting));
+    }
+
+    @Override
     public MeetingResponse getMeetingById(Long id) {
         Meeting meeting = meetingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Meeting not found with id: " + id));
         return mapToResponse(meeting);
+    }
+
+    @Override
+    public void deleteMeet(Long id) {
+        meetingRepository.findById(id).orElseThrow(() -> new RuntimeException("meeting is found"));
+        meetingRepository.deleteById(id);
     }
 
     private MeetingResponse mapToResponse(Meeting meeting) {
