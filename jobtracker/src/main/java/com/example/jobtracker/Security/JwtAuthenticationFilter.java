@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             jwt = authHeader.substring(7).trim();
-            if (!jwt.isBlank()) {
+            if (!jwt.isBlank() && !"undefined".equalsIgnoreCase(jwt) && !"null".equalsIgnoreCase(jwt)) {
                 userEmail = jwtService.extractUsername(jwt);
                 if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            logger.warn("Cannot set user authentication: " + e.getMessage());
         }
         filterChain.doFilter(request, response);
     }

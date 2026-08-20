@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TrackerService } from '../../../services/tracker.service';
 import { Auth } from '../../../services/auth';
@@ -17,6 +17,7 @@ export class TrackerList implements OnInit {
   private trackerService = inject(TrackerService);
   public authService = inject(Auth);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   trackers: Tracker[] = [];
   filteredTrackers: Tracker[] = [];
@@ -44,15 +45,19 @@ export class TrackerList implements OnInit {
   loadTrackers() {
     this.isLoading = true;
     this.errorMessage = '';
+    this.cdr.markForCheck();
+
     this.trackerService.getAllTracker().subscribe({
       next: (data) => {
-        this.trackers = data || [];
+        this.trackers = Array.isArray(data) ? data : (data as any)?.content || [];
         this.applyFilters();
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.errorMessage = err?.error?.message || err?.message || 'Failed to load trackers from server.';
         this.isLoading = false;
+        this.cdr.markForCheck();
         console.error(err);
       },
     });

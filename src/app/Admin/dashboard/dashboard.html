@@ -9,84 +9,84 @@
       </div>
     </div>
 
-    <div class="nav-section-title">MAIN MENU</div>
+    <div class="sidebar-nav">
+      <div class="nav-section-title">MAIN MENU</div>
 
-    <div class="nav-links" routerLink="/admin/home" routerLinkActive="active">
-      <span class="icon">🏠</span>
-      <span class="text">Dashboard</span>
-    </div>
-
-    <div class="nav-links" routerLink="/admin/team-member" routerLinkActive="active">
-      <span class="icon">👥</span>
-      <span class="text">Team Member</span>
-    </div>
-
-    <div class="nav-links" routerLink="/admin/final-year" routerLinkActive="active">
-      <span class="icon">🎓</span>
-      <span class="text">Final Year</span>
-      <span class="nav-badge blue">320</span>
-    </div>
-
-    <div class="nav-links" routerLink="/admin/courseinfo">
-      <span class="icon">📚</span>
-      <span class="text">Course Topic Info</span>
-    </div>
-
-    <!-- Trackers Accordion Item -->
-    <!-- Trackers Accordion Item -->
-    <div class="nav-accordion" [class.expanded]="isTrackerOpen">
-      <div
-        class="nav-links nav-accordion-header"
-        (click)="toggleTrackerMenu($event)"
-        routerLink="/admin/trackers"
-      >
-        <span class="icon">📈</span>
-        <span class="text">Trackers</span>
-        <span class="nav-badge green">Manage</span>
+      <div class="nav-links" routerLink="/admin/home" routerLinkActive="active">
+        <span class="icon">🏠</span>
+        <span class="text">Dashboard</span>
       </div>
-    </div>
 
-    <div class="nav-links" routerLink="/admin/sections" routerLinkActive="active">
-      <span class="icon">📁</span>
-      <span class="text">Sections</span>
-    </div>
+      <div class="nav-links" routerLink="/admin/team-member" routerLinkActive="active">
+        <span class="icon">👥</span>
+        <span class="text">Team Member</span>
+      </div>
 
-    <div class="nav-links" routerLink="/admin/skills" routerLinkActive="active">
-      <span class="icon">⚡</span>
-      <span class="text">Skills</span>
-    </div>
+      <div class="nav-links" routerLink="/admin/final-year" routerLinkActive="active">
+        <span class="icon">🎓</span>
+        <span class="text">Final Year</span>
+        <span class="nav-badge blue">320</span>
+      </div>
 
-    <div class="nav-section-title">MANAGEMENT</div>
+      <div class="nav-links" routerLink="/admin/courseinfo">
+        <span class="icon">📚</span>
+        <span class="text">Course Topic Info</span>
+      </div>
 
-    <div class="nav-links">
-      <span class="icon">🛠️</span>
-      <span class="text">Resources</span>
-    </div>
+      <!-- Trackers Accordion Item -->
+      <div class="nav-accordion" [class.expanded]="isTrackerOpen">
+        <div
+          class="nav-links nav-accordion-header"
+          (click)="toggleTrackerMenu($event)"
+          routerLink="/admin/trackers"
+        >
+          <span class="icon">📈</span>
+          <span class="text">Trackers</span>
+          <span class="nav-badge green">Manage</span>
+        </div>
+      </div>
 
-    <div class="nav-links">
-      <span class="icon">🙋🏻‍♂️</span>
-      <span class="text">Attendance</span>
-    </div>
+      <div class="nav-links" routerLink="/admin/sections" routerLinkActive="active">
+        <span class="icon">📁</span>
+        <span class="text">Sections</span>
+      </div>
 
-    <div class="nav-links">
-      <span class="icon">👔</span>
-      <span class="text">Experienced People</span>
-    </div>
+      <div class="nav-links" routerLink="/admin/skills" routerLinkActive="active">
+        <span class="icon">⚡</span>
+        <span class="text">Skills</span>
+      </div>
 
-    <div class="nav-links">
-      <span class="icon">🎯</span>
-      <span class="text">Goals</span>
-    </div>
+      <div class="nav-section-title">MANAGEMENT</div>
 
-    <div class="nav-links">
-      <span class="icon">🗓️</span>
-      <span class="text">Meetings</span>
-      <span class="nav-badge pulse">5 Today</span>
-    </div>
+      <div class="nav-links">
+        <span class="icon">🛠️</span>
+        <span class="text">Resources</span>
+      </div>
 
-    <div class="nav-links">
-      <span class="icon">⚙️</span>
-      <span class="text">Settings</span>
+      <div class="nav-links">
+        <span class="icon">🙋🏻‍♂️</span>
+        <span class="text">Attendance</span>
+      </div>
+
+      <div class="nav-links">
+        <span class="icon">👔</span>
+        <span class="text">Experienced People</span>
+      </div>
+
+      <div class="nav-links">
+        <span class="icon">🎯</span>
+        <span class="text">Goals</span>
+      </div>
+
+      <div class="nav-links" routerLink="/admin/meetings" routerLinkActive="active">
+        <span class="icon">🗓️</span>
+        <span class="text">Meetings</span>
+      </div>
+
+      <div class="nav-links">
+        <span class="icon">⚙️</span>
+        <span class="text">Settings</span>
+      </div>
     </div>
 
     <div class="sidebar-footer">

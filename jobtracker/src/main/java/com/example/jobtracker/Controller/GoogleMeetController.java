@@ -27,7 +27,7 @@ public class GoogleMeetController {
 
     private final GoogleMeetService googleMeetService;
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<MeetingResponse> createMeeting(@Valid @RequestBody MeetingRequest request) {
         MeetingResponse response = googleMeetService.createMeeting(request);

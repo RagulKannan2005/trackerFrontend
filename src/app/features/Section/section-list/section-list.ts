@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { SectionForm } from '../section-form/section-form';
 import { SectionFilter } from '../section-filter/section-filter';
 import { SectionService } from '../../../services/section.service';
@@ -17,6 +17,7 @@ export class SectionList implements OnInit {
   private sectionservice = inject(SectionService);
   public authService = inject(Auth);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   section: Section[] = [];
   filteredSection: Section[] = [];
@@ -43,15 +44,19 @@ export class SectionList implements OnInit {
   loadSections() {
     this.isLoading = true;
     this.errorMessage = '';
+    this.cdr.markForCheck();
+
     this.sectionservice.getAllSections().subscribe({
       next: (data) => {
-        this.section = data || [];
+        this.section = Array.isArray(data) ? data : (data as any)?.content || [];
         this.applyFilters();
         this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.errorMessage = err?.error?.message || err?.message || 'Failed to load sections from server';
         this.isLoading = false;
+        this.cdr.markForCheck();
         console.error(err);
       },
     });

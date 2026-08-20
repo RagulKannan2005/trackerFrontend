@@ -1,1 +1,64 @@
-<p>meeting-form works!</p>
+<div class="meeting-form-container">
+  <h2>Create Google Meeting</h2>
+  @if (errormessage) {
+    <div class="error-message">
+      {{ errormessage }}
+    </div>
+  }
+  <form [formGroup]="meetingForm" (ngSubmit)="createMeeting()">
+    <div class="form-group">
+      <label for="summary">Meeting Title</label>
+      <input type="text" id="summary" formControlName="summary" placeholder="Enter meeting title" />
+
+      @if (meetingForm.get('summary')?.touched && meetingForm.get('summary')?.invalid) {
+        <small> meeting title is required. </small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        rows="4"
+        formControlName="description"
+        placeholder="Enter meeting description"
+      >
+      </textarea>
+    </div>
+
+    <div class="date-time-row">
+      <div class="form-group">
+        <label for="startDateTime">Start Date & Time</label>
+        <input type="datetime-local" id="startDateTime" formControlName="startDateTime" />
+        @if (meetingForm.get('startDateTime')?.touched && meetingForm.get('startDateTime')?.invalid) {
+          <small class="error-text"> Start date & time is required. </small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="endDateTime">End Date & Time</label>
+        <input type="datetime-local" id="endDateTime" formControlName="endDateTime" />
+        @if (meetingForm.get('endDateTime')?.touched && meetingForm.get('endDateTime')?.invalid) {
+          <small class="error-text"> End date & time is required. </small>
+        }
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="attendeeEmails">Participants</label>
+      <input type="text" id="attendeeEmails" formControlName="attendeeEmails" placeholder="Email addresses" />
+      <small>Enter multiple email addresses separated by commas.</small>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" (click)="cancel()">Cancel</button>
+      <button type="submit" [disabled]="isLoading">
+        @if (isLoading) {
+          Creating...
+        } @else {
+          Create Meeting
+        }
+      </button>
+    </div>
+  </form>
+</div>

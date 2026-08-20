@@ -27,16 +27,16 @@ export class Login {
     };
     this.authservice.login(credentials).subscribe({
       next:(response:any)=>{
-        localStorage.setItem('token',response.token);
-        localStorage.setItem(
-          'user',
-          JSON.stringify({
-            id:response.id,
-            username:response.username,
-            role:response.role,
-          })
-        )
         if (response?.token) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              id: response.id,
+              username: response.username,
+              role: response.role,
+            })
+          );
           this.router.navigate(['/admin/home']);
         }
         console.log('login successfull');

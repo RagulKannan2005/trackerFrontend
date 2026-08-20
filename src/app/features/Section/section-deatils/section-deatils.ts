@@ -41,16 +41,18 @@ export class SectionDeatils {
   isSubmitting: boolean = false;
 
   ngOnInit() {
-    const idparam = this.route.snapshot.paramMap.get('id');
-    if (idparam) {
-      this.sectionId = Number(idparam);
-      this.loadSection(this.sectionId);
-      this.loadAssignedSkills();
-    } else {
-      this.isLoading = false;
-      this.errorMessage = 'No section ID provided.';
-      this.cdr.markForCheck();
-    }
+    this.route.paramMap.subscribe((params) => {
+      const idparam = params.get('id');
+      if (idparam) {
+        this.sectionId = Number(idparam);
+        this.loadSection(this.sectionId);
+        this.loadAssignedSkills();
+      } else {
+        this.isLoading = false;
+        this.errorMessage = 'No section ID provided.';
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   isAdmin(): boolean {
