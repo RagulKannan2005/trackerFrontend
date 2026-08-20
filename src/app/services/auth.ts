@@ -28,8 +28,13 @@ export class Auth {
     const u = this.getuser();
     return u?.userName || u?.username || null;
   }
-  getrole() {
-    return this.getuser()?.role || null;
+  getrole(): string | null {
+    const role = this.getuser()?.role;
+    return role ? role.toString().toUpperCase() : null;
+  }
+  isAdmin(): boolean {
+    const role = this.getrole();
+    return role === 'ADMIN' || role === 'ROLE_ADMIN';
   }
   logout(): void {
     localStorage.removeItem('token');

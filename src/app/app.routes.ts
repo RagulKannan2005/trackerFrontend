@@ -14,11 +14,13 @@ import { SkillList } from './features/Skills/skill-list/skill-list';
 import { MeetingList } from './features/GoogleMeet/meeting-list/meeting-list';
 import { MeetingForm } from './features/GoogleMeet/meeting-form/meeting-form';
 import { MeetingDetails } from './features/GoogleMeet/meeting-details/meeting-details';
+import { UserDashboard } from './User/user-dashboard/user-dashboard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
+  {path:'userDashboard',component:UserDashboard},
 
   // Shared Admin Layout
   {

@@ -45,11 +45,12 @@
           <span class="nav-badge green">Manage</span>
         </div>
       </div>
-
-      <div class="nav-links" routerLink="/admin/sections" routerLinkActive="active">
-        <span class="icon">📁</span>
-        <span class="text">Sections</span>
-      </div>
+      @if (Authservice.isAdmin()) {
+        <div class="nav-links" routerLink="/admin/sections" routerLinkActive="active">
+          <span class="icon">📁</span>
+          <span class="text">Sections</span>
+        </div>
+      }
 
       <div class="nav-links" routerLink="/admin/skills" routerLinkActive="active">
         <span class="icon">⚡</span>
@@ -93,7 +94,7 @@
       <div class="user-pill">
         <div class="avatar">RK</div>
         <div class="user-info">
-          <span class="user-name">Ragul Kannan</span>
+          <span class="user-name">{{ Authservice.getusername() || 'Admin' }}</span>
           <span class="user-role">{{ Authservice.getrole() }}</span>
         </div>
       </div>

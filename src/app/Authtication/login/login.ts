@@ -37,9 +37,15 @@ export class Login {
               role: response.role,
             })
           );
-          this.router.navigate(['/admin/home']);
+          const userRole = (response?.role || '').toString().toUpperCase();
+          if (userRole === 'USER' ) {
+            this.router.navigate(['/userDashboard']);
+            console.log(response);
+          } else {
+            this.router.navigate(['/admin/home']);
+          }
         }
-        console.log('login successfull');
+        console.log('login successful');
       },
       error:(error)=>{
         console.log('login failed');
