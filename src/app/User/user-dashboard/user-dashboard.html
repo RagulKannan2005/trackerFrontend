@@ -1,0 +1,372 @@
+<div class="container">
+  <!-- Sidebar (matching Admin Dashboard layout) -->
+  <div class="sidebar">
+    <div class="logo-container">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">
+        <h3>JCT</h3>
+        <span class="logo-subtitle">Candidate Portal</span>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-title">MAIN MENU</div>
+
+      <div class="nav-links active">
+        <span class="icon">🏠</span>
+        <span class="text">Dashboard</span>
+      </div>
+
+      <div class="nav-links">
+        <span class="icon">📈</span>
+        <span class="text">Curriculum Progress</span>
+        <span class="nav-badge green">75%</span>
+      </div>
+
+      <div class="nav-links">
+        <span class="icon">🗓️</span>
+        <span class="text">Meetings & Coaching</span>
+        <span class="nav-badge blue">{{ stats.upcomingMeetingsCount }} New</span>
+      </div>
+
+      <div class="nav-links">
+        <span class="icon">⚡</span>
+        <span class="text">Skills & Progress</span>
+      </div>
+
+      <div class="nav-section-title">ACCOUNT & SETUP</div>
+
+      <div class="nav-links">
+        <span class="icon">👤</span>
+        <span class="text">My Candidate Profile</span>
+      </div>
+
+      <div class="nav-links">
+        <span class="icon">💻</span>
+        <span class="text">Equipment Readiness</span>
+      </div>
+
+      <div class="nav-links">
+        <span class="icon">⚙️</span>
+        <span class="text">Settings</span>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-pill">
+        <div class="avatar">{{ (Authservice.getusername() || 'US').substring(0, 2).toUpperCase() }}</div>
+        <div class="user-info">
+          <span class="user-name">{{ Authservice.getusername() || candidate.name }}</span>
+          <span class="user-role">{{ Authservice.getrole() || 'USER' }}</span>
+        </div>
+      </div>
+      <div class="nav-links logout" (click)="Authservice.logout()">
+        <span class="icon">🚪</span>
+        <span class="text">Logout</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="content">
+    <div class="user-dashboard-wrapper">
+      <!-- Top Welcome Header -->
+      <header class="welcome-banner">
+        <div class="banner-content">
+          <div class="user-badge-row">
+            <span class="role-pill">CANDIDATE DASHBOARD</span>
+            <span class="tracker-pill">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              {{ candidate.trackerName }}
+            </span>
+          </div>
+          <h1 class="greeting-title">Welcome back, <span class="highlight">{{ Authservice.getusername() || candidate.name }}</span>! 👋</h1>
+          <p class="greeting-subtitle">
+            Track your skill milestones, manage coaching Google Meets, and monitor your job readiness progress.
+          </p>
+        </div>
+        <div class="banner-actions">
+          <button type="button" class="btn-primary" (click)="joinMeeting(upcomingMeetings[0]?.meetLink)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+            Join Next Google Meet
+          </button>
+        </div>
+      </header>
+
+      <!-- Key Performance Metrics (KPI Cards) -->
+      <section class="kpi-grid">
+        <div class="kpi-card gradient-blue">
+          <div class="kpi-header">
+            <span class="kpi-icon">🎯</span>
+            <span class="kpi-label">Overall Progress</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-value-row">
+              <span class="kpi-number">{{ stats.overallProgress }}%</span>
+              <span class="kpi-subtext">{{ stats.completedSkills }}/{{ stats.totalSkills }} Skills Mastered</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" [style.width.%]="stats.overallProgress"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-card gradient-purple">
+          <div class="kpi-header">
+            <span class="kpi-icon">⚡</span>
+            <span class="kpi-label">Skills Completed</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-value-row">
+              <span class="kpi-number">{{ stats.completedSkills }}</span>
+              <span class="kpi-subtext">out of {{ stats.totalSkills }} total topics</span>
+            </div>
+            <span class="badge-success">On Track</span>
+          </div>
+        </div>
+
+        <div class="kpi-card gradient-teal">
+          <div class="kpi-header">
+            <span class="kpi-icon">🙋‍♂️</span>
+            <span class="kpi-label">Meeting Attendance</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-value-row">
+              <span class="kpi-number">{{ stats.attendanceRate }}%</span>
+              <span class="kpi-subtext">Present for Coaching Sessions</span>
+            </div>
+            <span class="badge-info">High Engagement</span>
+          </div>
+        </div>
+
+        <div class="kpi-card gradient-amber">
+          <div class="kpi-header">
+            <span class="kpi-icon">📅</span>
+            <span class="kpi-label">Upcoming Meetings</span>
+          </div>
+          <div class="kpi-body">
+            <div class="kpi-value-row">
+              <span class="kpi-number">{{upcomingMeetings.length}}</span>
+              <span class="kpi-subtext">Sessions Scheduled</span>
+            </div>
+            <span class="badge-warning">Next: {{ upcomingMeetings[0]?.date }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Dashboard Content Grid -->
+      <div class="dashboard-main-grid">
+        <!-- Left Column: Skill Progress Sections & Upcoming Meetings -->
+        <div class="main-left-col">
+          <!-- Section Skills & Progress Card -->
+          <div class="content-card">
+            <div class="card-header">
+              <div class="header-title">
+                <span class="header-icon">📈</span>
+                <div>
+                  <h3>Curriculum & Skill Progress</h3>
+                  <p>Track section milestones and individual skill completion statuses</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="sections-accordion">
+              @for (sec of sections; track sec.id) {
+                <div class="section-item">
+                  <div class="section-top">
+                    <div class="section-title-wrap">
+                      <span class="section-num">0{{ sec.id }}</span>
+                      <div>
+                        <h4 class="section-title">{{ sec.title }}</h4>
+                        <p class="section-desc">{{ sec.description }}</p>
+                      </div>
+                    </div>
+                    <div class="section-progress-badge">
+                      <span>{{ sec.progress }}%</span>
+                    </div>
+                  </div>
+
+                  <!-- Section Progress Bar -->
+                  <div class="section-progress-track">
+                    <div class="section-progress-bar" [style.width.%]="sec.progress"></div>
+                  </div>
+
+                  <!-- Skills List inside Section -->
+                  <div class="skills-chips-grid">
+                    @for (skill of sec.skills; track skill.name) {
+                      <div class="skill-chip" [ngClass]="skill.status.toLowerCase().replace('_', '-')">
+                        <span class="status-indicator"></span>
+                        <span class="skill-name">{{ skill.name }}</span>
+                        <span class="skill-status-tag">{{ skill.status.replace('_', ' ') }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Upcoming Google Meet Coaching Sessions Card -->
+          <div class="content-card margin-top">
+            <div class="card-header">
+              <div class="header-title">
+                <span class="header-icon">📹</span>
+                <div>
+                  <h3>Google Meet Coaching Sessions</h3>
+                  <p>Scheduled 1-on-1 and group coaching meetings</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="meetings-list">
+              @for (meet of upcomingMeetings; track meet.id || $index) {
+                <div class="meeting-card">
+                  <div class="meeting-time-box">
+                    <span class="meet-date">{{ meet.date || (meet.startDateTime | date:'MMM d, y') }}</span>
+                    <span class="meet-time">{{ meet.time || (meet.startDateTime | date:'h:mm a') }}</span>
+                    <span class="meet-duration">{{ meet.duration || (meet.endDateTime ? ((meet.startDateTime | date:'h:mm a') + ' - ' + (meet.endDateTime | date:'h:mm a')) : '') }}</span>
+                  </div>
+
+                  <div class="meeting-details-box">
+                    <h4 class="meet-summary">{{ meet.summary }}</h4>
+                    <p class="meet-desc">{{ meet.description }}</p>
+
+                    @if (meet.participants) {
+                      <div class="meet-meta">
+                        <span class="meta-item">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                          {{ meet.participants }}
+                        </span>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="meeting-action-box">
+                    <button type="button" class="btn-meet-join" (click)="joinMeeting(meet.meetLink)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                      Join Google Meet
+                    </button>
+                  </div>
+                </div>
+              }
+              @if (upcomingMeetings.length === 0) {
+                <div class="empty-state" style="padding: 1.5rem; text-align: center; color: #64748b;">
+                  <p>No upcoming coaching meetings scheduled.</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Candidate Profile & Equipment Readiness -->
+        <div class="main-right-col">
+          <!-- Candidate Info & Verification Card -->
+          <div class="content-card">
+            <div class="card-header">
+              <div class="header-title">
+                <span class="header-icon">🎓</span>
+                <div>
+                  <h3>Candidate Profile</h3>
+                  <p>Academic & Contact Information</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-info-list">
+              <div class="info-row">
+                <span class="info-label">Full Name</span>
+                <span class="info-value font-bold">{{ candidate.name }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-value">{{ candidate.email }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Phone</span>
+                <span class="info-value">{{ candidate.phone }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Degree & Stream</span>
+                <span class="info-value">{{ candidate.degree }} ({{ candidate.stream }})</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Passout Year</span>
+                <span class="info-value">{{ candidate.graduationYear }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tech Equipment & Setup Readiness Card -->
+          <div class="content-card margin-top">
+            <div class="card-header">
+              <div class="header-title">
+                <span class="header-icon">💻</span>
+                <div>
+                  <h3>Setup & Equipment Readiness</h3>
+                  <p>Hardware and connectivity prerequisites</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="readiness-list">
+              <div class="readiness-item" [class.active]="candidate.haveLaptop">
+                <span class="readiness-icon">💻</span>
+                <div class="readiness-text">
+                  <span class="item-title">Laptop / PC Available</span>
+                  <span class="item-status">{{ candidate.haveLaptop ? 'Verified & Ready' : 'Pending' }}</span>
+                </div>
+                <span class="check-mark">✓</span>
+              </div>
+
+              <div class="readiness-item" [class.active]="candidate.haveInternet">
+                <span class="readiness-icon">🌐</span>
+                <div class="readiness-text">
+                  <span class="item-title">High-Speed Internet</span>
+                  <span class="item-status">{{ candidate.haveInternet ? 'Connected' : 'Pending' }}</span>
+                </div>
+                <span class="check-mark">✓</span>
+              </div>
+
+              <div class="readiness-item" [class.active]="candidate.haveMobile">
+                <span class="readiness-icon">📱</span>
+                <div class="readiness-text">
+                  <span class="item-title">Mobile Device Access</span>
+                  <span class="item-status">{{ candidate.haveMobile ? 'Verified' : 'Pending' }}</span>
+                </div>
+                <span class="check-mark">✓</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- English & Communication Proficiency -->
+          <div class="content-card margin-top">
+            <div class="card-header">
+              <div class="header-title">
+                <span class="header-icon">🗣️</span>
+                <div>
+                  <h3>English & Communication</h3>
+                  <p>Assessed communication proficiency</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="proficiency-grid">
+              <div class="prof-card">
+                <span class="prof-label">Speaking</span>
+                <span class="prof-value badge-pill-green">{{ candidate.englishSpeaking }}</span>
+              </div>
+              <div class="prof-card">
+                <span class="prof-label">Writing</span>
+                <span class="prof-value badge-pill-blue">{{ candidate.englishWriting }}</span>
+              </div>
+              <div class="prof-card">
+                <span class="prof-label">Reading</span>
+                <span class="prof-value badge-pill-purple">{{ candidate.englishReading }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

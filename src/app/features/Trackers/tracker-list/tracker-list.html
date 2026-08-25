@@ -1,0 +1,113 @@
+<div class="page-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div>
+      <h2>Trackers Management</h2>
+      <p class="subtitle">Manage job coaching subject trackers and learning paths</p>
+    </div>
+    @if (isAdmin()) {
+      <button class="btn-primary" (click)="openAddModal()">
+        <span>➕</span> Add New Tracker
+      </button>
+    }
+  </div>
+
+  <!-- Metric Cards -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-icon purple">📊</div>
+      <div>
+        <div class="metric-value">{{ trackers.length }}</div>
+        <div class="metric-label">Total Trackers</div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon green">✅</div>
+      <div>
+        <div class="metric-value">{{ activeCount }}</div>
+        <div class="metric-label">Active Trackers</div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gray">⏸️</div>
+      <div>
+        <div class="metric-value">{{ inactiveCount }}</div>
+        <div class="metric-label">Inactive Trackers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <app-tracker-filter (filterChange)="onFilterChange($event)"></app-tracker-filter>
+
+  <!-- Trackers Table Grid -->
+  @if (isLoading) {
+    <div class="loading-spinner">Loading trackers...</div>
+  } @else if (errorMessage) {
+    <div class="error-banner">{{ errorMessage }}</div>
+  } @else {
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tracker Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (tracker of filteredTrackers; track tracker.id ?? $index) {
+            <tr>
+              <td>#{{ tracker.id }}</td>
+              <td class="font-bold">{{ tracker.trackerName }}</td>
+              <td class="text-secondary">{{ tracker.description }}</td>
+              <td>
+                <span class="badge" [class.badge-active]="tracker.active" [class.badge-inactive]="!tracker.active">
+                  {{ tracker.active ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="text-right actions-cell">
+                <button class="action-btn btn-view" (click)="viewDetails(tracker.id!)" title="View Details">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+                @if (isAdmin()) {
+                  <button class="action-btn btn-edit" (click)="openEditModal(tracker)" title="Edit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+                  <button class="action-btn btn-delete" (click)="deleteTracker(tracker.id!)" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty-state">No trackers found matching your search criteria.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Add / Edit Form Modal Overlay -->
+  @if (isModalOpen) {
+    <app-tracker-form
+      [trackerData]="selectedTracker"
+      [isEditMode]="isEditMode"
+      (save)="handleFormSave($event)"
+      (cancel)="closeModal()"
+    ></app-tracker-form>
+  }
+</div>

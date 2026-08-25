@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.jobtracker.Dto.AuthenticationRequest;
 import com.example.jobtracker.Dto.AuthenticationResponse;
 import com.example.jobtracker.Dto.RegisterRequest;
-import com.example.jobtracker.Entity.Role;
 import com.example.jobtracker.Entity.Users;
+import com.example.jobtracker.Enums.Role;
 import com.example.jobtracker.Repository.UserRepository;
 import com.example.jobtracker.Security.JwtService;
 
@@ -26,11 +26,15 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse register(RegisterRequest request){
+        if (request.getPassword() == null || request.getPassword().isBlank()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+
         var user= Users.builder()
                     .username(request.getUsername())
                     .email(request.getEmail())
                     .password(passwordEncoder.encode(request.getPassword()))
-                    .role(request.getRole())
+                    .role(request.getRole() != null ? request.getRole() : Role.USER)
                     .active(true)
                     .build();
 
@@ -38,7 +42,7 @@ public class AuthenticationService {
         var jwtToken=jwtService.generateToken(user);
         return AuthenticationResponse.builder()
             .token(jwtToken)
-            .username(user.getUsername())
+            .username(user.getRealUsername())
             .role(user.getRole())
             .build();
     }
@@ -53,7 +57,7 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .username(user.getUsername())
+                .username(user.getRealUsername())
                 .role(user.getRole())
                 .build();
     }

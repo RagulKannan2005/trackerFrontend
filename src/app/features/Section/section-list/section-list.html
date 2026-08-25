@@ -1,0 +1,108 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2>Section Management</h2>
+      <p class="subtitle">Manage job coaching subject sections and learning paths</p>
+    </div>
+    @if (isAdmin()) {
+      <button class="button-primary btn-primary" (click)="openAddModel()">
+        <span>➕</span> Add New Section
+      </button>
+    }
+  </div>
+
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-icon purple">📊</div>
+      <div>
+        <div class="metric-value">{{ section.length }}</div>
+        <div class="metric-label">Total Sections</div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon green">✅</div>
+      <div>
+        <div class="metric-value">{{ activeCount }}</div>
+        <div class="metric-label">Active Sections</div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gray">🚫</div>
+      <div>
+        <div class="metric-value">{{ inactiveCount }}</div>
+        <div class="metric-label">Inactive Sections</div>
+      </div>
+    </div>
+  </div>
+
+  <app-section-filter (filterChange)="onFilterChange($event)"></app-section-filter>
+
+  @if (isLoading) {
+    <div class="loading-spinner">Loading sections...</div>
+  } @else if (errorMessage) {
+    <div class="error-banner">{{ errorMessage }}</div>
+  } @else {
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Section Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (sec of filteredSection; track sec.id ?? $index) {
+            <tr>
+              <td>#{{ sec.id }}</td>
+              <td class="font-bold">{{ sec.sectionName }}</td>
+              <td class="text-secondary">{{ sec.description }}</td>
+              <td>
+                <span class="badge" [class.badge-active]="sec.active" [class.badge-inactive]="!sec.active">
+                  {{ sec.active ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="text-right actions-cell">
+                <button class="action-btn btn-view" (click)="viewDetails(sec.id)" title="View Details">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+                @if (isAdmin()) {
+                  <button class="action-btn btn-edit" (click)="openEditModel(sec)" title="Edit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+                  <button class="action-btn btn-delete" (click)="deleteSection(sec.id)" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty-state">No sections found matching your search criteria.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (isModelOpen) {
+    <app-section-form
+      [sectionData]="selectedSection"
+      [isEditMode]="isEditMode"
+      (save)="handleFormsave($event)"
+      (cancel)="closeModel()"
+    ></app-section-form>
+  }
+</div>

@@ -1,0 +1,55 @@
+<div class="meeting-details-container">
+  @if (isloading) {
+    <p>Loading Meeting...</p>
+  }
+  @if (meeting) {
+    <button type="button" (click)="goBack()">← Back to Meetings</button>
+    <div class="meeting-details-card">
+      <h2>
+        {{ meeting.summary }}
+      </h2>
+
+      @if (meeting.description) {
+        <p>
+          {{ meeting.description }}
+        </p>
+      }
+      <div class="meeting-information">
+        <div>
+          <strong>Date</strong>
+          <span>
+            {{ meeting.date }}
+          </span>
+        </div>
+        <div>
+          <strong>Time</strong>
+          <span>
+            {{ meeting.time }}
+          </span>
+        </div>
+        <div>
+          <strong> Status </strong>
+          <span>
+            {{ meeting.status }}
+          </span>
+        </div>
+        <div>
+          <strong> Participants </strong>
+          <span>
+            {{ meeting.participants || 'no participants' }}
+          </span>
+        </div>
+      </div>
+      <div class="meeting-actions">
+        @if (meeting.meetLink) {
+          <button type="button" (click)="joinMeeting()">Join Google Meet</button>
+        }
+        @if (meeting.htmlLink) {
+            <button type="button" (click)="openCalender()">
+                Open Google Calender
+            </button>
+        }
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,54 @@
+<div class="meeting-container">
+  <div class="meeting-header">
+    <div>
+      <h2>Google Meetings</h2>
+      <p>Manage Your Scheduled meetings</p>
+    </div>
+    @if (isAdmin()) {
+      <button class="add-btn" (click)="createMeetings()">
+        <span class="material-symbols-outlined">add_circle</span>
+        New Meeting
+      </button>
+    }
+  </div>
+
+  <div class="search-container">
+    <input type="text" [(ngModel)]="searchText" placeholder="search by title or description" />
+  </div>
+  @if (isLoading) {
+    <div class="loading">Loading Meetings. . .</div>
+  }
+  @if (!isLoading) {
+    <div class="meeting-list">
+      @for (meeting of filteredMeetings; track meeting.id || $index) {
+        <div class="meetings-card">
+          <div class="meetings-info">
+            <h3>{{ meeting.summary }}</h3>
+            <p>{{ meeting.description }}</p>
+            <div class="meeting-meta">
+              <span> 📅{{ meeting.date }} </span>
+              <span> 🕐 {{ meeting.time }} </span>
+              <span>
+                {{ meeting.status }}
+              </span>
+            </div>
+          </div>
+
+          <div class="meeting-action">
+            <button type="button" (click)="viewMeetings(meeting.id)">View</button>
+            @if (meeting.meetLink) {
+              <button type="button" (click)="joinMeeting(meeting.meetLink)">Join</button>
+            }
+          </div>
+        </div>
+      }
+      @if (filteredMeetings.length==0) {
+        <div class="empty-state">
+            <p>
+                No Meetings Found.
+            </p>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,1 +1,55 @@
-<p>home works!</p>
+<div class="dashboard-wrapper">
+    <!-- Header Banner -->
+    <header class="dashboard-header">
+        <div class="header-main">
+            <div class="header-badge">
+                <span class="pulse-dot"></span> Admin Control Center
+            </div>
+            <h2>Job Tracker Analytics 🚀</h2>
+            <p class="subtitle">Monitor training metrics, student participation, and track performance in real-time.</p>
+        </div>
+        <div class="header-action">
+            <div class="total-pill">
+                <span class="pill-label">Total Trainees</span>
+                <span class="pill-value">{{totalCandidates}}</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Metrics Cards Grid -->
+    <section class="stats-grid">
+        @for(tracker of trackers; track tracker.name) {
+        <div class="stat-card" [style.border-top-color]="tracker.color">
+            <div class="card-header">
+                <div class="icon-avatar" [style.background-color]="tracker.color + '18'" [style.color]="tracker.color">
+                    <span>{{tracker.icon}}</span>
+                </div>
+                <span class="trend-badge">{{tracker.change}}</span>
+            </div>
+            <div class="card-body">
+                <h3 class="track-name">{{tracker.name}}</h3>
+                <div class="count-wrapper">
+                    <span class="count-number">{{tracker.count}}</span>
+                    <span class="count-unit">Candidates</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <span class="status-chip" [style.background-color]="tracker.color + '12'" [style.color]="tracker.color">
+                    ● {{tracker.badge}}
+                </span>
+            </div>
+        </div>
+        }
+    </section>
+
+    <!-- Analytics Charts Section -->
+    <section class="charts-grid">
+        <div class="chart-card">
+            <highcharts-chart [options]="chartOptions" class="highchart-instance"></highcharts-chart>
+        </div>
+        <div class="chart-card">
+            <highcharts-chart [options]="attandancechartOptions" class="highchart-instance"></highcharts-chart>
+        </div>
+    </section>
+</div>
+

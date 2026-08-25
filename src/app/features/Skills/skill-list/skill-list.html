@@ -1,0 +1,104 @@
+<div class="page-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div>
+      <h2>Skills Management</h2>
+      <p class="subtitle">Manage topics and technical skills library</p>
+    </div>
+    @if (isAdmin()) {
+      <button class="btn-primary" (click)="openAddModel()">
+        <span>➕</span> Add New Skill
+      </button>
+    }
+  </div>
+
+  <!-- Metric Cards -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-icon purple">⚡</div>
+      <div>
+        <div class="metric-value">{{ skills.length }}</div>
+        <div class="metric-label">Total Skills</div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon green">✅</div>
+      <div>
+        <div class="metric-value">{{ activeCount }}</div>
+        <div class="metric-label">Active Skills</div>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gray">⏸️</div>
+      <div>
+        <div class="metric-value">{{ inactiveCount }}</div>
+        <div class="metric-label">Inactive Skills</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skills Table Grid -->
+  @if (isLoading) {
+    <div class="loading-spinner">Loading skills...</div>
+  } @else if (errorMessage) {
+    <div class="error-banner">{{ errorMessage }}</div>
+  } @else {
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Skill Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (skill of filteredSkills; track skill.id ?? $index) {
+            <tr>
+              <td>#{{ skill.id }}</td>
+              <td class="font-bold">{{ skill.skillName }}</td>
+              <td class="text-secondary">{{ skill.description }}</td>
+              <td>
+                <span class="badge" [class.badge-active]="skill.active" [class.badge-inactive]="!skill.active">
+                  {{ skill.active ? 'Active' : 'Inactive' }}
+                </span>
+              </td>
+              <td class="text-right actions-cell">
+                @if (isAdmin()) {
+                  <button class="action-btn btn-edit" (click)="openEditModel(skill)" title="Edit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+                  <button class="action-btn btn-delete" (click)="deleteSkill(skill.id!)" title="Delete">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="empty-state">No skills found.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Add / Edit Form Modal Overlay -->
+  @if (isModelOpen) {
+    <app-skill-form
+      [skilldata]="selectedSkill"
+      [isEditMode]="isEditMode"
+      (formsubmit)="handleFormSave($event)"
+      (formcancel)="closeModel()"
+    ></app-skill-form>
+  }
+</div>

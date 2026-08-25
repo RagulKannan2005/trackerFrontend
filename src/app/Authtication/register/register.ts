@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-register',
@@ -10,25 +11,48 @@ import { FormsModule } from '@angular/forms';
 })
 export class Register {
   private router = inject(Router);
+  private fb = inject(FormBuilder);
+  private authService = inject(Auth);
 
   registerData = {
     username: '',
     email: '',
     password: '',
-    role: ''
+    role: '',
   };
 
+  errorMessage = '';
+  successMessage = '';
+  isLoading = false;
+
   onRegister() {
-    if(this.registerData.role == "Admin")
-    {
-      alert("Admin registered successfully");
-      this.router.navigate(['admindashboard']);
-    }
-    else if(this.registerData.role == "Student")
-    {
-      alert("Student registered successfully");
-      this.router.navigate(['studentdashboard']);
-    }
-    console.log('Register data submitted:', this.registerData);
+    this.errorMessage = '';
+    this.successMessage = '';
+    const credentials = {
+      username: this.registerData.username,
+      email: this.registerData.email,
+      password: this.registerData.password,
+      role: this.registerData.role,
+    };
+    this.isLoading = true;
+    this.authService.register(credentials).subscribe({
+      next: (data: any) => {
+        this.isLoading = false;
+        this.successMessage = 'Registration is successfull Redirecting to login';
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 2000);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        if (err.error.includes('User is already registered')) {
+          this.errorMessage = 'User is already registered';
+        } else {
+          this.errorMessage = 'Registration failed';
+        }
+        this.registerData = { username: '', email: '', password: '', role: '' };
+      },
+    });
   }
 }
